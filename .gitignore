@@ -1,0 +1,10 @@
+node_modules/
+dist/
+
+public/*
+
+/h4to5
+.DS_Store
+
+.dev.vars
+misc.md

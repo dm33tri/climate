@@ -1,0 +1,8 @@
+name = "climate"
+compatibility_date = "2023-05-03"
+account_id = "1789a824f63d01082e52596134776cd4"
+
+[[r2_buckets]]
+binding = "R2"
+bucket_name = "climate"
+preview_bucket_name = "climate-dev"

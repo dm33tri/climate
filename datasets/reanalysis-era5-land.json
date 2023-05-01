@@ -1,0 +1,342 @@
+[
+  {
+    "title": "ERA5-Land hourly data",
+    "value": "reanalysis-era5-land",
+    "available_dates": ["1950-01-01", "2023-04-27"],
+    "available_times": [
+      "00:00",
+      "01:00",
+      "02:00",
+      "03:00",
+      "04:00",
+      "05:00",
+      "06:00",
+      "07:00",
+      "08:00",
+      "09:00",
+      "10:00",
+      "11:00",
+      "12:00",
+      "13:00",
+      "14:00",
+      "15:00",
+      "16:00",
+      "17:00",
+      "18:00",
+      "19:00",
+      "20:00",
+      "21:00",
+      "22:00",
+      "23:00"
+    ],
+    "selectable": false,
+    "children": [
+      {
+        "title": "Temperature",
+        "value": "temperature",
+        "selectable": false,
+        "children": [
+          {
+            "title": "2m dewpoint temperature",
+            "value": "reanalysis-era5-land/2m_dewpoint_temperature",
+            "label": "ERA5-Land hourly / 2m dewpoint temperature"
+          },
+          {
+            "title": "2m temperature",
+            "value": "reanalysis-era5-land/2m_temperature",
+            "label": "ERA5-Land hourly / 2m temperature"
+          },
+          {
+            "title": "Skin temperature",
+            "value": "reanalysis-era5-land/skin_temperature",
+            "label": "ERA5-Land hourly / Skin temperature"
+          },
+          {
+            "title": "Soil temperature level 1",
+            "value": "reanalysis-era5-land/soil_temperature_level_1",
+            "label": "ERA5-Land hourly / Soil temperature level 1"
+          },
+          {
+            "title": "Soil temperature level 2",
+            "value": "reanalysis-era5-land/soil_temperature_level_2",
+            "label": "ERA5-Land hourly / Soil temperature level 2"
+          },
+          {
+            "title": "Soil temperature level 3",
+            "value": "reanalysis-era5-land/soil_temperature_level_3",
+            "label": "ERA5-Land hourly / Soil temperature level 3"
+          },
+          {
+            "title": "Soil temperature level 4",
+            "value": "reanalysis-era5-land/soil_temperature_level_4",
+            "label": "ERA5-Land hourly / Soil temperature level 4"
+          }
+        ]
+      },
+      {
+        "title": "Lakes",
+        "value": "lakes",
+        "selectable": false,
+        "children": [
+          {
+            "title": "Lake bottom temperature",
+            "value": "reanalysis-era5-land/lake_bottom_temperature",
+            "label": "ERA5-Land hourly / Lake bottom temperature"
+          },
+          {
+            "title": "Lake ice depth",
+            "value": "reanalysis-era5-land/lake_ice_depth",
+            "label": "ERA5-Land hourly / Lake ice depth"
+          },
+          {
+            "title": "Lake ice temperature",
+            "value": "reanalysis-era5-land/lake_ice_temperature",
+            "label": "ERA5-Land hourly / Lake ice temperature"
+          },
+          {
+            "title": "Lake mix-layer depth",
+            "value": "reanalysis-era5-land/lake_mix_layer_depth",
+            "label": "ERA5-Land hourly / Lake mix-layer depth"
+          },
+          {
+            "title": "Lake mix-layer temperature",
+            "value": "reanalysis-era5-land/lake_mix_layer_temperature",
+            "label": "ERA5-Land hourly / Lake mix-layer temperature"
+          },
+          {
+            "title": "Lake shape factor",
+            "value": "reanalysis-era5-land/lake_shape_factor",
+            "label": "ERA5-Land hourly / Lake shape factor"
+          },
+          {
+            "title": "Lake total layer temperature",
+            "value": "reanalysis-era5-land/lake_total_layer_temperature",
+            "label": "ERA5-Land hourly / Lake total layer temperature"
+          }
+        ]
+      },
+      {
+        "title": "Snow",
+        "value": "snow",
+        "selectable": false,
+        "children": [
+          {
+            "title": "Snow albedo",
+            "value": "reanalysis-era5-land/snow_albedo",
+            "label": "ERA5-Land hourly / Snow albedo"
+          },
+          {
+            "title": "Snow cover",
+            "value": "reanalysis-era5-land/snow_cover",
+            "label": "ERA5-Land hourly / Snow cover"
+          },
+          {
+            "title": "Snow density",
+            "value": "reanalysis-era5-land/snow_density",
+            "label": "ERA5-Land hourly / Snow density"
+          },
+          {
+            "title": "Snow depth",
+            "value": "reanalysis-era5-land/snow_depth",
+            "label": "ERA5-Land hourly / Snow depth"
+          },
+          {
+            "title": "Snow depth water equivalent",
+            "value": "reanalysis-era5-land/snow_depth_water_equivalent",
+            "label": "ERA5-Land hourly / Snow depth water equivalent"
+          },
+          {
+            "title": "Snowfall",
+            "value": "reanalysis-era5-land/snowfall",
+            "label": "ERA5-Land hourly / Snowfall"
+          },
+          {
+            "title": "Snowmelt",
+            "value": "reanalysis-era5-land/snowmelt",
+            "label": "ERA5-Land hourly / Snowmelt"
+          },
+          {
+            "title": "Temperature of snow layer",
+            "value": "reanalysis-era5-land/temperature_of_snow_layer",
+            "label": "ERA5-Land hourly / Temperature of snow layer"
+          }
+        ]
+      },
+      {
+        "title": "Soil Water",
+        "value": "soil_water",
+        "selectable": false,
+        "children": [
+          {
+            "title": "Skin reservoir content",
+            "value": "reanalysis-era5-land/skin_reservoir_content",
+            "label": "ERA5-Land hourly / Skin reservoir content"
+          },
+          {
+            "title": "Volumetric soil water layer 1",
+            "value": "reanalysis-era5-land/volumetric_soil_water_layer_1",
+            "label": "ERA5-Land hourly / Volumetric soil water layer 1"
+          },
+          {
+            "title": "Volumetric soil water layer 2",
+            "value": "reanalysis-era5-land/volumetric_soil_water_layer_2",
+            "label": "ERA5-Land hourly / Volumetric soil water layer 2"
+          },
+          {
+            "title": "Volumetric soil water layer 3",
+            "value": "reanalysis-era5-land/volumetric_soil_water_layer_3",
+            "label": "ERA5-Land hourly / Volumetric soil water layer 3"
+          },
+          {
+            "title": "Volumetric soil water layer 4",
+            "value": "reanalysis-era5-land/volumetric_soil_water_layer_4",
+            "label": "ERA5-Land hourly / Volumetric soil water layer 4"
+          }
+        ]
+      },
+      {
+        "title": "Radiation and Heat",
+        "value": "radiation_and_heat",
+        "selectable": false,
+        "children": [
+          {
+            "title": "Forecast albedo",
+            "value": "reanalysis-era5-land/forecast_albedo",
+            "label": "ERA5-Land hourly / Forecast albedo"
+          },
+          {
+            "title": "Surface latent heat flux",
+            "value": "reanalysis-era5-land/surface_latent_heat_flux",
+            "label": "ERA5-Land hourly / Surface latent heat flux"
+          },
+          {
+            "title": "Surface net solar radiation",
+            "value": "reanalysis-era5-land/surface_net_solar_radiation",
+            "label": "ERA5-Land hourly / Surface net solar radiation"
+          },
+          {
+            "title": "Surface net thermal radiation",
+            "value": "reanalysis-era5-land/surface_net_thermal_radiation",
+            "label": "ERA5-Land hourly / Surface net thermal radiation"
+          },
+          {
+            "title": "Surface sensible heat flux",
+            "value": "reanalysis-era5-land/surface_sensible_heat_flux",
+            "label": "ERA5-Land hourly / Surface sensible heat flux"
+          },
+          {
+            "title": "Surface solar radiation downwards",
+            "value": "reanalysis-era5-land/surface_solar_radiation_downwards",
+            "label": "ERA5-Land hourly / Surface solar radiation downwards"
+          },
+          {
+            "title": "Surface thermal radiation downwards",
+            "value": "reanalysis-era5-land/surface_thermal_radiation_downwards",
+            "label": "ERA5-Land hourly / Surface thermal radiation downwards"
+          }
+        ]
+      },
+      {
+        "title": "Evaporation and Runoff",
+        "value": "evaporation_and_runoff",
+        "selectable": false,
+        "children": [
+          {
+            "title": "Evaporation from bare soil",
+            "value": "reanalysis-era5-land/evaporation_from_bare_soil",
+            "label": "ERA5-Land hourly / Evaporation from bare soil"
+          },
+          {
+            "title": "Evaporation from open water surfaces excluding oceans",
+            "value": "reanalysis-era5-land/evaporation_from_open_water_surfaces_excluding_oceans",
+            "label": "ERA5-Land hourly / Evaporation from open water surfaces excluding oceans"
+          },
+          {
+            "title": "Evaporation from the top of canopy",
+            "value": "reanalysis-era5-land/evaporation_from_the_top_of_canopy",
+            "label": "ERA5-Land hourly / Evaporation from the top of canopy"
+          },
+          {
+            "title": "Evaporation from vegetation transpiration",
+            "value": "reanalysis-era5-land/evaporation_from_vegetation_transpiration",
+            "label": "ERA5-Land hourly / Evaporation from vegetation transpiration"
+          },
+          {
+            "title": "Potential evaporation",
+            "value": "reanalysis-era5-land/potential_evaporation",
+            "label": "ERA5-Land hourly / Potential evaporation"
+          },
+          {
+            "title": "Runoff",
+            "value": "reanalysis-era5-land/runoff",
+            "label": "ERA5-Land hourly / Runoff"
+          },
+          {
+            "title": "Snow evaporation",
+            "value": "reanalysis-era5-land/snow_evaporation",
+            "label": "ERA5-Land hourly / Snow evaporation"
+          },
+          {
+            "title": "Sub-surface runoff",
+            "value": "reanalysis-era5-land/sub_surface_runoff",
+            "label": "ERA5-Land hourly / Sub-surface runoff"
+          },
+          {
+            "title": "Surface runoff",
+            "value": "reanalysis-era5-land/surface_runoff",
+            "label": "ERA5-Land hourly / Surface runoff"
+          },
+          {
+            "title": "Total evaporation",
+            "value": "reanalysis-era5-land/total_evaporation",
+            "label": "ERA5-Land hourly / Total evaporation"
+          }
+        ]
+      },
+      {
+        "title": "Wind, Pressure and Precipitation",
+        "value": "wind_pressure_and_precipitation",
+        "selectable": false,
+        "children": [
+          {
+            "title": "10m u-component of wind",
+            "value": "reanalysis-era5-land/10m_u_component_of_wind",
+            "label": "ERA5-Land hourly / 10m u-component of wind"
+          },
+          {
+            "title": "10m v-component of wind",
+            "value": "reanalysis-era5-land/10m_v_component_of_wind",
+            "label": "ERA5-Land hourly / 10m v-component of wind"
+          },
+          {
+            "title": "Surface pressure",
+            "value": "reanalysis-era5-land/surface_pressure",
+            "label": "ERA5-Land hourly / Surface pressure"
+          },
+          {
+            "title": "Total precipitation",
+            "value": "reanalysis-era5-land/total_precipitation",
+            "label": "ERA5-Land hourly / Total precipitation"
+          }
+        ]
+      },
+      {
+        "title": "Vegetation",
+        "value": "vegetation",
+        "selectable": false,
+        "children": [
+          {
+            "title": "Leaf area index, high vegetation",
+            "value": "reanalysis-era5-land/leaf_area_index_high_vegetation",
+            "label": "ERA5-Land hourly / Leaf area index, high vegetation"
+          },
+          {
+            "title": "Leaf area index, low vegetation",
+            "value": "reanalysis-era5-land/leaf_area_index_low_vegetation",
+            "label": "ERA5-Land hourly / Leaf area index, low vegetation"
+          }
+        ]
+      }
+    ]
+  }
+]

@@ -1,0 +1,291 @@
+[
+  {
+    "title": "GOES-16 imagery and metadata",
+    "value": "goes-16",
+    "selectable": false,
+    "children": [
+      {
+        "title": "L2 Products",
+        "value": "L2 Products",
+        "selectable": false,
+        "children": [
+          {
+            "title": "Advanced Baseline Imager Level 2 Cloud Top Height CONUS",
+            "value": "GOES-16/ABI-L2-ACHAC",
+            "label": "GOES-16 / ABI-L2-ACHAC"
+          },
+          {
+            "title": "Advanced Baseline Imager Level 2 Cloud Top Height Full Disk",
+            "value": "GOES-16/ABI-L2-ACHAF",
+            "label": "GOES-16 / ABI-L2-ACHAF"
+          },
+          {
+            "title": "Advanced Baseline Imager Level 2 Cloud Top Height Mesoscale",
+            "value": "GOES-16/ABI-L2-ACHAM",
+            "label": "GOES-16 / ABI-L2-ACHAM"
+          },
+          {
+            "title": "Advanced Baseline Imager Level 2 Cloud Top Temperature Full Disk",
+            "value": "GOES-16/ABI-L2-ACHTF",
+            "label": "GOES-16 / ABI-L2-ACHTF"
+          },
+          {
+            "title": "Advanced Baseline Imager Level 2 Cloud Top Temperature Mesoscale",
+            "value": "GOES-16/ABI-L2-ACHTM",
+            "label": "GOES-16 / ABI-L2-ACHTM"
+          },
+          {
+            "title": "Advanced Baseline Imager Level 2 Clear Sky Mask CONUS",
+            "value": "GOES-16/ABI-L2-ACMC",
+            "label": "GOES-16 / ABI-L2-ACMC"
+          },
+          {
+            "title": "Advanced Baseline Imager Level 2 Clear Sky Mask Full Disk",
+            "value": "GOES-16/ABI-L2-ACMF",
+            "label": "GOES-16 / ABI-L2-ACMF"
+          },
+          {
+            "title": "Advanced Baseline Imager Level 2 Clear Sky Mask Mesoscale",
+            "value": "GOES-16/ABI-L2-ACMM",
+            "label": "GOES-16 / ABI-L2-ACMM"
+          },
+          {
+            "title": "Advanced Baseline Imager Level 2 Cloud Top Phase CONUS",
+            "value": "GOES-16/ABI-L2-ACTPC",
+            "label": "GOES-16 / ABI-L2-ACTPC"
+          },
+          {
+            "title": "Advanced Baseline Imager Level 2 Cloud Top Phase Full Disk",
+            "value": "GOES-16/ABI-L2-ACTPF",
+            "label": "GOES-16 / ABI-L2-ACTPF"
+          },
+          {
+            "title": "Advanced Baseline Imager Level 2 Cloud Top Phase Mesoscale",
+            "value": "GOES-16/ABI-L2-ACTPM",
+            "label": "GOES-16 / ABI-L2-ACTPM"
+          },
+          {
+            "title": "Advanced Baseline Imager Level 2 Aerosol Detection CONUS",
+            "value": "GOES-16/ABI-L2-ADPC",
+            "label": "GOES-16 / ABI-L2-ADPC"
+          },
+          {
+            "title": "Advanced Baseline Imager Level 2 Aerosol Detection Full Disk",
+            "value": "GOES-16/ABI-L2-ADPF",
+            "label": "GOES-16 / ABI-L2-ADPF"
+          },
+          {
+            "title": "Advanced Baseline Imager Level 2 Aerosol Detection Mesoscale",
+            "value": "GOES-16/ABI-L2-ADPM",
+            "label": "GOES-16 / ABI-L2-ADPM"
+          },
+          {
+            "title": "Ice Concentration and Extent",
+            "value": "GOES-16/ABI-L2-AICEF",
+            "label": "GOES-16 / ABI-L2-AICEF"
+          },
+          {
+            "title": "Ice Age and Thickness",
+            "value": "GOES-16/ABI-L2-AITAF",
+            "label": "GOES-16 / ABI-L2-AITAF"
+          },
+          {
+            "title": "Advanced Baseline Imager Level 2 Aerosol Optical Depth CONUS",
+            "value": "GOES-16/ABI-L2-AODC",
+            "label": "GOES-16 / ABI-L2-AODC"
+          },
+          {
+            "title": "Advanced Baseline Imager Level 2 Aerosol Optical Depth Full Disk",
+            "value": "GOES-16/ABI-L2-AODF",
+            "label": "GOES-16 / ABI-L2-AODF"
+          },
+          {
+            "title": "Land Surface Bidirectional Reflectance Factor (CONUS) 2 km resolution & DQFs",
+            "value": "GOES-16/ABI-L2-BRFC",
+            "label": "GOES-16 / ABI-L2-BRFC"
+          },
+          {
+            "title": "Land Surface Bidirectional Reflectance Factor (Full Disk) 2 km resolution & DQFs",
+            "value": "GOES-16/ABI-L2-BRFF",
+            "label": "GOES-16 / ABI-L2-BRFF"
+          },
+          {
+            "title": "Land Surface Bidirectional Reflectance Factor (Mesoscale) 2 km resolution & DQFs",
+            "value": "GOES-16/ABI-L2-BRFM",
+            "label": "GOES-16 / ABI-L2-BRFM"
+          },
+          {
+            "title": "Advanced Baseline Imager Level 2 Cloud and Moisture Imagery CONUS",
+            "value": "GOES-16/ABI-L2-CMIPC",
+            "label": "GOES-16 / ABI-L2-CMIPC"
+          },
+          {
+            "title": "Advanced Baseline Imager Level 2 Cloud and Moisture Imagery Full Disk",
+            "value": "GOES-16/ABI-L2-CMIPF",
+            "label": "GOES-16 / ABI-L2-CMIPF"
+          },
+          {
+            "title": "Advanced Baseline Imager Level 2 Cloud and Moisture Imagery Mesoscale",
+            "value": "GOES-16/ABI-L2-CMIPM",
+            "label": "GOES-16 / ABI-L2-CMIPM"
+          },
+          {
+            "title": "Advanced Baseline Imager Level 2 Cloud Optical Depth CONUS",
+            "value": "GOES-16/ABI-L2-CODC",
+            "label": "GOES-16 / ABI-L2-CODC"
+          },
+          {
+            "title": "Advanced Baseline Imager Level 2 Cloud Optical Depth Full Disk",
+            "value": "GOES-16/ABI-L2-CODF",
+            "label": "GOES-16 / ABI-L2-CODF"
+          },
+          {
+            "title": "Advanced Baseline Imager Level 2 Cloud Particle Size CONUS",
+            "value": "GOES-16/ABI-L2-CPSC",
+            "label": "GOES-16 / ABI-L2-CPSC"
+          },
+          {
+            "title": "Advanced Baseline Imager Level 2 Cloud Particle Size Full Disk",
+            "value": "GOES-16/ABI-L2-CPSF",
+            "label": "GOES-16 / ABI-L2-CPSF"
+          },
+          {
+            "title": "Advanced Baseline Imager Level 2 Cloud Particle Size Mesoscale",
+            "value": "GOES-16/ABI-L2-CPSM",
+            "label": "GOES-16 / ABI-L2-CPSM"
+          },
+          {
+            "title": "Advanced Baseline Imager Level 2 Cloud Top Pressure CONUS",
+            "value": "GOES-16/ABI-L2-CTPC",
+            "label": "GOES-16 / ABI-L2-CTPC"
+          },
+          {
+            "title": "Advanced Baseline Imager Level 2 Cloud Top Pressure Full Disk",
+            "value": "GOES-16/ABI-L2-CTPF",
+            "label": "GOES-16 / ABI-L2-CTPF"
+          },
+          {
+            "title": "Advanced Baseline Imager Level 2 Derived Motion Winds CONUS",
+            "value": "GOES-16/ABI-L2-DMWC",
+            "label": "GOES-16 / ABI-L2-DMWC"
+          },
+          {
+            "title": "Advanced Baseline Imager Level 2 Derived Motion Winds Full Disk",
+            "value": "GOES-16/ABI-L2-DMWF",
+            "label": "GOES-16 / ABI-L2-DMWF"
+          },
+          {
+            "title": "Advanced Baseline Imager Level 2 Derived Motion Winds Mesoscale",
+            "value": "GOES-16/ABI-L2-DMWM",
+            "label": "GOES-16 / ABI-L2-DMWM"
+          },
+          {
+            "title": "L2+ Derived Motion Winds - Vapor CONUS",
+            "value": "GOES-16/ABI-L2-DMWVC",
+            "label": "GOES-16 / ABI-L2-DMWVC"
+          },
+          {
+            "title": "L2+ Derived Motion Winds - Vapor Full Disk",
+            "value": "GOES-16/ABI-L2-DMWVF",
+            "label": "GOES-16 / ABI-L2-DMWVF"
+          },
+          {
+            "title": "L2+ Derived Motion Winds - Vapor Mesoscale",
+            "value": "GOES-16/ABI-L2-DMWVM",
+            "label": "GOES-16 /ABI-L2-DMWVM"
+          },
+          {
+            "title": "Advanced Baseline Imager Level 2 Derived Stability Indices CONUS",
+            "value": "GOES-16/ABI-L2-DSIC",
+            "label": "GOES-16 / ABI-L2-DSIC"
+          },
+          {
+            "title": "Advanced Baseline Imager Level 2 Derived Stability Indices Full Disk",
+            "value": "GOES-16/ABI-L2-DSIF",
+            "label": "GOES-16 / ABI-L2-DSIF"
+          },
+          {
+            "title": "Advanced Baseline Imager Level 2 Derived Stability Indices Mesoscale",
+            "value": "GOES-16/ABI-L2-DSIM",
+            "label": "GOES-16 / ABI-L2-DSIM"
+          },
+          {
+            "title": "Advanced Baseline Imager Level 2 Downward Shortwave Radiation CONUS",
+            "value": "GOES-16/ABI-L2-DSRC",
+            "label": "GOES-16 / ABI-L2-DSRC"
+          },
+          {
+            "title": "Advanced Baseline Imager Level 2 Downward Shortwave Radiation Full Disk",
+            "value": "GOES-16/ABI-L2-DSRF",
+            "label": "GOES-16 / ABI-L2-DSRF"
+          },
+          {
+            "title": "Advanced Baseline Imager Level 2 Downward Shortwave Radiation Mesoscale",
+            "value": "GOES-16/ABI-L2-DSRM",
+            "label": "GOES-16 / ABI-L2-DSRM"
+          },
+          {
+            "title": "Advanced Baseline Imager Level 2 Fire (Hot Spot Characterization) CONUS",
+            "value": "GOES-16/ABI-L2-FDCC",
+            "label": "GOES-16 / ABI-L2-FDCC"
+          },
+          {
+            "title": "Advanced Baseline Imager Level 2 Fire (Hot Spot Characterization) Full Disk",
+            "value": "GOES-16/ABI-L2-FDCF",
+            "label": "GOES-16 / ABI-L2-FDCF"
+          },
+          {
+            "title": "Advanced Baseline Imager Level 2 Fire (Hot Spot Characterization) Mesoscale",
+            "value": "GOES-16/ABI-L2-FDCM",
+            "label": "GOES-16 / ABI-L2-FDCM"
+          },
+          {
+            "title": "Land Surface Albedo (CONUS) 2km resolution & DQFs",
+            "value": "GOES-16/ABI-L2-LSAC",
+            "label": "GOES-16 / ABI-L2-LSAC"
+          },
+          {
+            "title": "Land Surface Albedo (Full Disk) 2km resolution & DQFs",
+            "value": "GOES-16/ABI-L2-LSAF",
+            "label": "GOES-16 / ABI-L2-LSAF"
+          },
+          {
+            "title": "Land Surface Albedo (Mesoscale) 2km resolution & DQFs",
+            "value": "GOES-16/ABI-L2-LSAM",
+            "label": "GOES-16 / ABI-L2-LSAM"
+          },
+          {
+            "title": "Advanced Baseline Imager Level 2 Land Surface Temperature CONUS",
+            "value": "GOES-16/ABI-L2-LSTC",
+            "label": "GOES-16 / ABI-L2-LSTC"
+          },
+          {
+            "title": "Advanced Baseline Imager Level 2 Land Surface Temperature Full Disk",
+            "value": "GOES-16/ABI-L2-LSTF",
+            "label": "GOES-16 / ABI-L2-LSTF"
+          },
+          {
+            "title": "Advanced Baseline Imager Level 2 Land Surface Temperature Mesoscale",
+            "value": "GOES-16/ABI-L2-LSTM",
+            "label": "GOES-16 / ABI-L2-LSTM"
+          },
+          {
+            "title": "Advanced Baseline Imager Level 2 Legacy Vertical Moisture Profile CONUS",
+            "value": "GOES-16/ABI-L2-LVMPC",
+            "label": "GOES-16 / ABI-L2-LVMPC"
+          },
+          {
+            "title": "Advanced Baseline Imager Level 2 Legacy Vertical Moisture Profile Full Disk",
+            "value": "GOES-16/ABI-L2-LVMPF",
+            "label": "GOES-16 / ABI-L2-LVMPF"
+          },
+          {
+            "title": "Advanced Baseline Imager Level 2 Legacy Vertical Moisture Profile Mesoscale",
+            "value": "GOES-16/ABI-L2-LVMPM",
+            "label": "GOES-16 / ABI-L2-LVMPM"
+          }
+        ]
+      }
+    ]
+  }
+]
