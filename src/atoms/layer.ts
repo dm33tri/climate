@@ -10,9 +10,8 @@ export type LayerSettings = {
   name: string;
   product: string;
   type: "h3" | "grid";
-  palette: string[];
+  palette: string;
   opacity: number;
-  blendMode: string;
   visible: boolean;
 
   // can override global date
@@ -23,13 +22,14 @@ export type LayerSettings = {
 };
 
 export type Layer = LayerSettings & {
-  state: "requested" | "loading" | "processing" | "loaded" | "error";
+  state: "loading" | "loaded" | "error";
   layer?: DeckGLLayer;
 };
 
+type PartialSettings = Partial<LayerSettings> & Pick<LayerSettings, "name">;
+
 type Init = {
   action: "init";
-  layer: LayerSettings;
 };
 type Add = {
   action: "add";
@@ -48,7 +48,59 @@ export type Update = Init | Add | Edit | Remove;
 
 const settings = atomWithStorage<LayerSettings[]>("layers", []);
 
-const family = atomFamily((_name: Layer["name"]) => atom<Layer | null>(null));
+const family = atomFamily((_name: Layer["name"]) => {
+  const layerSettings = atom<PartialSettings | null>(null);
+  return atom(
+    (get) => {
+      const settings = get(layerSettings);
+      const date = get(datetime);
+      const params = settings && getParams(settings, date);
+      const dataset = params && get(loadable(datasets(params)));
+
+      if (!settings) {
+        return null;
+      }
+
+      if (!params || !dataset) {
+        return {
+          ...settings,
+          state: "error",
+        };
+      }
+
+      if (dataset.state === "loading") {
+        return {
+          ...settings,
+          state: "loading",
+        };
+      }
+
+      if (dataset.state === "hasError") {
+        return {
+          ...settings,
+          state: "error",
+        };
+      }
+
+      if (
+        dataset.state === "hasData" &&
+        dataset.data != null &&
+        settings.palette != null &&
+        settings.opacity != null &&
+        settings.visible != null
+      ) {
+        return {
+          ...settings,
+          state: "loaded",
+          layer: getDeckGlLayer(dataset.data, settings as LayerSettings),
+        };
+      }
+    },
+    (_get, set, layer: PartialSettings | null) => {
+      set(layerSettings, layer);
+    }
+  );
+});
 
 export const edit = atom<Partial<LayerSettings> | null>(null);
 
@@ -56,21 +108,25 @@ export const layers = atom(
   (get) =>
     get(settings)
       .map(({ name }) => get(family(name)))
-      .filter((layer): layer is Layer => layer !== null),
-  (get, set, update: Update | ((layers: LayerSettings) => void)) => {
-    if (typeof update === "function") {
-      const layers = get(settings);
-      for (const layer of layers) {
-        update(layer);
+      .filter((layer): layer is Layer => layer != null),
+  (get, set, update: Update) => {
+    if (update.action === "init") {
+      for (const layer of get(settings)) {
+        set(family(layer.name), layer);
       }
-      return;
     }
 
     if (update.action === "add") {
+      set(family(update.layer.name), update.layer);
       set(settings, (settings) => [...settings, update.layer]);
     }
 
     if (update.action === "edit") {
+      const layer = get(settings).find(
+        (layer) => layer.name === update.layer.name
+      );
+      const updatedLayer = { ...layer, ...update.layer };
+      set(family(update.layer.name), updatedLayer);
       set(settings, (settings) =>
         settings.map((layer) => {
           if (layer.name !== update.layer.name) {
@@ -85,54 +141,16 @@ export const layers = atom(
     }
 
     if (update.action === "remove") {
+      set(family(update.layer.name), null);
       set(settings, (settings) =>
         settings.filter((layer) => layer.name !== update.layer.name)
       );
-    }
-
-    if (
-      update.action === "edit" ||
-      update.action === "add" ||
-      update.action === "init"
-    ) {
-      const date = get(datetime);
-      const newLayer = update.layer;
-      const oldLayer = get(family(newLayer.name));
-      const oldParams = oldLayer && getParams(oldLayer, date);
-      const params = getParams({ ...oldLayer, ...newLayer }, date);
-
-      if (params && (!oldParams || oldParams.key !== params.key)) {
-        const layer = newLayer as LayerSettings;
-        set(family(layer.name), { ...layer, state: "loading" });
-        get(datasets(params)).then((dataset) => {
-          set(family(newLayer.name), {
-            ...layer,
-            state: "loaded",
-            layer: getDeckGlLayer(dataset, layer),
-          });
-        });
-      } else {
-        const prevLayer = oldLayer as Layer;
-        const layer = { ...prevLayer, ...newLayer };
-        set(family(layer.name), layer);
-        if (
-          layer.layer &&
-          (layer.visible !== prevLayer.visible ||
-            layer.palette !== layer.palette ||
-            layer.opacity !== prevLayer.opacity ||
-            layer.blendMode !== prevLayer.blendMode)
-        ) {
-          layer.layer = layer.layer.clone({ ...newLayer });
-        }
-      }
     }
   }
 );
 
 layers.onMount = (setLayers) => {
-  setLayers((layer) => {
-    setLayers({ action: "init", layer });
-  });
+  setLayers({ action: "init" });
 };
 
 export default { edit, layers };

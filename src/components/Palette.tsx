@@ -7,14 +7,14 @@ const palettes: SelectProps["options"] = Object.entries(colors).map(
       label: type,
       options: Object.entries(palettes).map(([title, colors]) => {
         return {
-          value: title,
+          value: `${type}.${title}`,
           label: (
             <div className="flex space-between w-full">
               <div className="w-1/2">{title}</div>
               <div className="w-1/2 flex overflow-hidden rounded-sm my-2">
                 {colors.map((color, index) => (
                   <div
-                    key={index}
+                    key={`${type}.${title}.${index}`}
                     style={{ background: color, width: "100%" }}
                   />
                 ))}

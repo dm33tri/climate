@@ -40,6 +40,7 @@ export async function loadGoesData(key: string) {
   const result: [number, number, number][] = [];
 
   const [valueKey] = file.keys();
+  console.log(valueKey);
 
   const { value: X, offset: xOffset, scale: xScale } = getValue(file, "x");
   const { value: Y, offset: yOffset, scale: yScale } = getValue(file, "y");

@@ -9,18 +9,24 @@ import {
   DatePicker,
   Row,
   Col,
+  Spin,
 } from "antd";
-import { MoreOutlined } from "@ant-design/icons";
+import {
+  ExclamationCircleOutlined,
+  ExclamationCircleTwoTone,
+  LoadingOutlined,
+  MoreOutlined,
+} from "@ant-design/icons";
 import { AddLayerButton } from "~/components/AddLayerButton";
 import atom, { Layer } from "~/atoms/layer";
-import { useAtom, useSetAtom } from "jotai";
+import { useAtom } from "jotai";
 import ui from "~/atoms/ui";
 import { datetime } from "~/atoms/datetime";
+import { EditLayerButton } from "./EditLayerButton";
 
 export function Side() {
   const [date, setDate] = useAtom(datetime);
   const [layers, setLayers] = useAtom(atom.layers);
-  const setEditLayer = useSetAtom(atom.edit);
   const [projection, setProjection] = useAtom(ui.projection);
   const columns: TableColumnsType<Layer> = [
     {
@@ -33,52 +39,17 @@ export function Side() {
       title: <Button type="text" size="small" icon={<MoreOutlined />} />,
       align: "center",
       key: "actions",
-      render: (layer) => (
-        <Space size="small">
-          <Button
-            type="text"
-            size="small"
-            icon={<MoreOutlined />}
-            onClick={() => {
-              const {
-                name,
-                product,
-                type,
-                palette,
-                opacity,
-                blendMode,
-                visible,
-                year,
-                month,
-                day,
-                time,
-              } = layer;
-              setEditLayer({
-                name,
-                product,
-                type,
-                palette,
-                opacity,
-                blendMode,
-                visible,
-                year,
-                month,
-                day,
-                time,
-              });
-            }}
-          />
-        </Space>
-      ),
+      render: (layer) => <EditLayerButton layer={layer} />,
     },
   ];
 
   return (
     <Layout.Sider width={350} style={{ padding: "8px", background: "#fff" }}>
-      <Space direction="vertical" size="large">
+      <Space direction="vertical" size="large" style={{ width: "100%" }}>
         <Row>
-          <Col>
+          <Col span={24}>
             <Table
+              style={{ width: "100%" }}
               size="small"
               columns={columns}
               dataSource={layers}
@@ -86,7 +57,6 @@ export function Side() {
               rowKey="name"
               rowSelection={{
                 type: "checkbox",
-                getCheckboxProps: () => ({}),
                 onSelect: (layer, selected) => {
                   setLayers({
                     action: "edit",
@@ -96,6 +66,19 @@ export function Side() {
                 selectedRowKeys: layers
                   .filter((layer) => layer.visible)
                   .map((layer) => layer.name),
+                renderCell: (_checked, layer, _index, _origin) =>
+                  (layer.state === "loading" && (
+                    <LoadingOutlined
+                      style={{ width: "16px", color: "#1677ff" }}
+                    />
+                  )) ||
+                  (layer.state === "error" && (
+                    <ExclamationCircleTwoTone
+                      twoToneColor="#fadb14"
+                      style={{ width: "16px" }}
+                    />
+                  )) ||
+                  _origin,
               }}
               pagination={false}
               showHeader={false}

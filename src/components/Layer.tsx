@@ -97,9 +97,8 @@ export function Layer() {
         onFinish={onFinish}
         initialValues={{
           type: "h3",
-          palette: "RdYlGn",
+          palette: "Divergent.RdYlGn",
           opacity: 0.5,
-          blendMode: "normal",
           visible: true,
           ...layer,
         }}

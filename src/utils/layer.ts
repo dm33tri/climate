@@ -1,11 +1,12 @@
-import dayjs, { Dayjs } from "dayjs";
-import { LayerSettings } from "~/atoms/layer";
 import * as h3 from "h3-js";
+import { Dayjs } from "dayjs";
 import chroma from "chroma-js";
 import { H3HexagonLayer } from "@deck.gl/geo-layers/typed";
 import type { Layer as DeckGLLayer } from "@deck.gl/core/typed";
 
+import { LayerSettings } from "~/atoms/layer";
 import { Dataset, DatasetParams } from "~/atoms/dataset";
+import { colors } from "~/utils/colors";
 
 export function getParams(
   layer: Partial<LayerSettings>,
@@ -38,17 +39,18 @@ export function getParams(
   }
 }
 
-const layers = new Map<LayerSettings, DeckGLLayer>();
+const layers = new Map<string, DeckGLLayer>();
 
 export function getDeckGlLayer(
   dataset: Dataset,
   layerSettings: LayerSettings
 ): DeckGLLayer | undefined {
   const { buffer, count, min, max } = dataset;
-  const { palette, type, opacity, name, visible } = layerSettings;
-  const scale = chroma.scale(palette).domain([min, max]);
-
-  if (!layers.has(layerSettings)) {
+  const { name, product, type, palette, opacity, visible } = layerSettings;
+  const key = `${name}/${product}/${type}/${palette}}`;
+  const path = palette.split(".");
+  const scale = chroma.scale(colors[path[0]][path[1]]).domain([min, max]);
+  if (!layers.has(key)) {
     if (type === "h3") {
       const offset = Int32Array.BYTES_PER_ELEMENT;
       const step = offset * 2 + Float32Array.BYTES_PER_ELEMENT;
@@ -74,9 +76,12 @@ export function getDeckGlLayer(
         },
       });
 
-      layers.set(layerSettings, deckGlLayer);
+      layers.set(key, deckGlLayer);
     }
+  } else {
+    const deckGlLayer = layers.get(key)!.clone({ visible, opacity });
+    layers.set(key, deckGlLayer);
   }
 
-  return layers.get(layerSettings);
+  return layers.get(key);
 }
