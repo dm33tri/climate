@@ -2,15 +2,15 @@ import { Layout as AntLayout } from "antd";
 
 import { Side } from "~/components/Side";
 import { Layer } from "~/components/Layer";
-import { Globe } from "~/components/Globe";
+import { Map } from "~/components/Map";
 
 export function Layout() {
   return (
-    <AntLayout className="h-screen">
+    <AntLayout style={{ minHeight: "100vh" }}>
       <Layer />
       <Side />
       <AntLayout.Content>
-        <Globe />
+        <Map />
       </AntLayout.Content>
     </AntLayout>
   );

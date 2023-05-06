@@ -1,4 +1,5 @@
 import h5wasm from "h5wasm";
+
 import { S3Client, ListObjectsV2Command } from "@aws-sdk/client-s3";
 import { getValue, getGeosProjection } from "~/loaders/utils";
 
@@ -20,9 +21,18 @@ export async function loadGoesData(key: string) {
   const path = list.Contents![0].Key!;
   const name = path.split("/").at(-1) as string;
 
-  const data = await fetch(`https://noaa-goes16.s3.amazonaws.com/${path}`).then(
-    (data) => data.arrayBuffer()
-  );
+  const data = await new Promise<ArrayBuffer>((resolve) => {
+    const makeFetch = (tries = 5) =>
+      fetch(`https://noaa-goes16.s3.amazonaws.com/${path}`)
+        .then((data) => data.arrayBuffer())
+        .then((data) => resolve(data))
+        .catch(() => {
+          if (tries > 0) {
+            setTimeout(() => makeFetch(tries - 1), 5000);
+          }
+        });
+    makeFetch();
+  });
 
   FS.writeFile(name, new Uint8Array(data));
 

@@ -14,6 +14,8 @@ import { Palette } from "~/components/Palette";
 
 import reanalysis_era5_land from "datasets/reanalysis-era5-land.json";
 import goes_16 from "datasets/goes-16.json";
+import { DeleteOutlined } from "@ant-design/icons";
+import { useEffect } from "react";
 
 const tree = [...reanalysis_era5_land, ...goes_16];
 
@@ -23,14 +25,32 @@ export function Layer() {
   const opacity = Form.useWatch("opacity", form);
   const setLayers = useSetAtom(layers);
 
-  const cancel = () => setLayer(null);
-  const submit = () => {
+  const cancel = () => {
     setLayer(null);
-    form.submit();
   };
-  const onFinish = (layer: LayerSettings) => {
-    setLayers({ action: "add", layer });
+
+  useEffect(() => {
+    if (layer) {
+      form.setFieldsValue(layer);
+    }
+  }, [layer]);
+
+  const remove = () => {
+    if (layer && layer.name) {
+      setLayers({ action: "remove", layer: { name: layer.name } });
+    }
+    setLayer(null);
   };
+
+  const onFinish = (settings: LayerSettings) => {
+    if (layer && layer.name) {
+      setLayers({ action: "edit", layer: { ...layer, ...settings } });
+    } else {
+      setLayers({ action: "add", layer: { ...layer, ...settings } });
+    }
+    cancel();
+  };
+
   const selectProduct = (_value: string, labels: React.ReactNode[]) => {
     if (!form.isFieldTouched("name")) {
       form.setFieldValue("name", labels[0] as string);
@@ -39,14 +59,29 @@ export function Layer() {
 
   return (
     <Drawer
-      title="Edit layer"
+      title={layer && layer.name ? "Edit layer" : "Add layer"}
       width={640}
+      afterOpenChange={(open) => {
+        if (!open) {
+          form.resetFields();
+        }
+      }}
       extra={
         <Space>
           <Button type="dashed" onClick={cancel}>
             Cancel
           </Button>
-          <Button type="primary" onClick={submit}>
+          {layer && layer.name ? (
+            <Button
+              danger
+              type="dashed"
+              icon={<DeleteOutlined />}
+              onClick={remove}
+            >
+              Remove layer
+            </Button>
+          ) : null}
+          <Button type="primary" onClick={form.submit}>
             Save
           </Button>
         </Space>
@@ -65,6 +100,7 @@ export function Layer() {
           palette: "RdYlGn",
           opacity: 0.5,
           blendMode: "normal",
+          visible: true,
           ...layer,
         }}
       >

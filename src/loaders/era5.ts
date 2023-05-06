@@ -2,9 +2,24 @@ import { unzipSync } from "fflate";
 import { NetCDFReader } from "@loaders.gl/netcdf";
 
 export async function loadEra5Data(path: string) {
-  const buffer = await fetch(`/api/cds/${path}`).then((data) =>
-    data.arrayBuffer()
-  );
+  const buffer = await new Promise<ArrayBuffer>((resolve) => {
+    const makeFetch = (tries = 5) =>
+      fetch(`/api/cds/${path}`)
+        .then((response) => {
+          if (response.ok) {
+            return response.arrayBuffer();
+          } else {
+            throw response.statusText;
+          }
+        })
+        .then((data) => resolve(data))
+        .catch(() => {
+          if (tries > 0) {
+            setTimeout(() => makeFetch(tries - 1), 4000);
+          }
+        });
+    makeFetch();
+  });
   const file = unzipSync(new Uint8Array(buffer))["data.nc"];
   const data = new NetCDFReader(file);
 

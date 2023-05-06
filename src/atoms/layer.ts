@@ -13,6 +13,7 @@ export type LayerSettings = {
   palette: string[];
   opacity: number;
   blendMode: string;
+  visible: boolean;
 
   // can override global date
   year?: string;
@@ -36,11 +37,11 @@ type Add = {
 };
 type Edit = {
   action: "edit";
-  layer: LayerSettings;
+  layer: Partial<LayerSettings> & Pick<LayerSettings, "name">;
 };
 type Remove = {
   action: "remove";
-  layer: Pick<LayerSettings, "name">;
+  layer: Partial<LayerSettings> & Pick<LayerSettings, "name">;
 };
 
 export type Update = Init | Add | Edit | Remove;
@@ -55,7 +56,7 @@ export const layers = atom(
   (get) =>
     get(settings)
       .map(({ name }) => get(family(name)))
-      .filter(Boolean),
+      .filter((layer): layer is Layer => layer !== null),
   (get, set, update: Update | ((layers: LayerSettings) => void)) => {
     if (typeof update === "function") {
       const layers = get(settings);
@@ -71,9 +72,21 @@ export const layers = atom(
 
     if (update.action === "edit") {
       set(settings, (settings) =>
-        settings.map((layer) =>
-          layer.name === update.layer.name ? update.layer : layer
-        )
+        settings.map((layer) => {
+          if (layer.name !== update.layer.name) {
+            return layer;
+          }
+          return {
+            ...layer,
+            ...update.layer,
+          };
+        })
+      );
+    }
+
+    if (update.action === "remove") {
+      set(settings, (settings) =>
+        settings.filter((layer) => layer.name !== update.layer.name)
       );
     }
 
@@ -82,25 +95,35 @@ export const layers = atom(
       update.action === "add" ||
       update.action === "init"
     ) {
-      const dt = get(datetime);
+      const date = get(datetime);
       const newLayer = update.layer;
       const oldLayer = get(family(newLayer.name));
-      const oldParams = oldLayer && getParams(oldLayer, dt);
-      const newParams = getParams(newLayer, dt);
+      const oldParams = oldLayer && getParams(oldLayer, date);
+      const params = getParams({ ...oldLayer, ...newLayer }, date);
 
-      if (!newParams) {
-        return;
-      }
-
-      if (!oldParams || oldParams.key !== newParams.key) {
-        set(family(newLayer.name), { ...newLayer, state: "loading" });
-        get(datasets(newParams)).then((dataset) => {
+      if (params && (!oldParams || oldParams.key !== params.key)) {
+        const layer = newLayer as LayerSettings;
+        set(family(layer.name), { ...layer, state: "loading" });
+        get(datasets(params)).then((dataset) => {
           set(family(newLayer.name), {
-            ...newLayer,
+            ...layer,
             state: "loaded",
-            layer: getDeckGlLayer(dataset, newLayer),
+            layer: getDeckGlLayer(dataset, layer),
           });
         });
+      } else {
+        const prevLayer = oldLayer as Layer;
+        const layer = { ...prevLayer, ...newLayer };
+        set(family(layer.name), layer);
+        if (
+          layer.layer &&
+          (layer.visible !== prevLayer.visible ||
+            layer.palette !== layer.palette ||
+            layer.opacity !== prevLayer.opacity ||
+            layer.blendMode !== prevLayer.blendMode)
+        ) {
+          layer.layer = layer.layer.clone({ ...newLayer });
+        }
       }
     }
   }

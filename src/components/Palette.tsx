@@ -15,8 +15,7 @@ const palettes: SelectProps["options"] = Object.entries(colors).map(
                 {colors.map((color, index) => (
                   <div
                     key={index}
-                    style={{ background: color }}
-                    className="w-full"
+                    style={{ background: color, width: "100%" }}
                   />
                 ))}
               </div>

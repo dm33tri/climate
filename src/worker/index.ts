@@ -1,4 +1,4 @@
-import { DatasetResult, DatasetParams } from "~/atoms/dataset";
+import type { DatasetResult, DatasetParams } from "~/atoms/dataset";
 
 export type Request = DatasetParams & {
   buffer: SharedArrayBuffer | ArrayBuffer;

@@ -5,7 +5,8 @@ import { _GlobeView, COORDINATE_SYSTEM } from "@deck.gl/core/typed";
 import { BitmapLayer } from "@deck.gl/layers/typed";
 import { TileLayer } from "@deck.gl/geo-layers/typed";
 
-import * as layer from "~/atoms/layer";
+import layer from "~/atoms/layer";
+import ui from "~/atoms/ui";
 
 const tileLayer = new TileLayer({
   data: [
@@ -40,19 +41,24 @@ const initialViewState = {
   zoom: 1,
 };
 
-const globeView = new _GlobeView({ id: "globe", controller: true });
-
-export function Globe() {
+export function Map() {
   const layers = useAtomValue(layer.layers);
+  const projection = useAtomValue(ui.projection);
 
   const deckGlLayers = useMemo(
     () => layers.map(({ layer }) => layer).filter(Boolean),
     [layers]
   );
 
+  const view = useMemo(() => {
+    return projection === "globe"
+      ? new _GlobeView({ id: "globe", controller: true, resolution: 10 })
+      : undefined;
+  }, [projection]);
+
   return (
     <DeckGL
-      views={[globeView]}
+      views={view}
       initialViewState={initialViewState}
       style={{ position: "relative" }}
       layers={[tileLayer, ...deckGlLayers]}

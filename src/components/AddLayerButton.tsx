@@ -10,9 +10,9 @@ export function AddLayerButton() {
   return (
     <Button
       icon={<PlusOutlined />}
-      onClick={() => setEditLayer({})}
+      onClick={() => setEditLayer({ visible: true })}
       type="primary"
-      className="w-full"
+      style={{ width: "100%" }}
     >
       Add layer
     </Button>

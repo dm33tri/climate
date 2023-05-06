@@ -25,6 +25,11 @@ function onLoad(response: Response) {
 }
 
 addEventListener("message", async ({ data: request }: { data: Request }) => {
+  if (!self.document) {
+    // @ts-ignore
+    self.document = { currentScript: {} }; // hack for worker
+  }
+
   const { path, buffer, source, type } = request;
 
   const data: [number, number, number][] | null =
