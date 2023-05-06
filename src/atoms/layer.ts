@@ -76,6 +76,7 @@ const family = atomFamily((_name: Layer["name"]) => {
       }
 
       if (dataset.state === "hasError") {
+        console.warn(dataset.error);
         return {
           ...settings,
           state: "error",
