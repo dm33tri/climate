@@ -1,45 +1,55 @@
-import h5wasm from "h5wasm";
-
-import { getValue, getGeosProjection } from "./utils";
+import { unzipSync } from "fflate";
+import { NetCDFReader } from "@loaders.gl/netcdf";
 
 export async function loadEra5Data(path: string) {
-  const { FS } = await h5wasm.ready;
-  const data = await fetch(path).then((data) => data.arrayBuffer());
-  const name = path.split("/").at(-1) as string;
-  FS.writeFile(name, new Uint8Array(data));
+  const buffer = await fetch(`/api/cds/${path}`).then((data) =>
+    data.arrayBuffer()
+  );
+  const file = unzipSync(new Uint8Array(buffer))["data.nc"];
+  const data = new NetCDFReader(file);
 
-  const file = new h5wasm.File(name, "r");
-  const values: [number, number, number][] = [];
+  const variable = data.variables.find(
+    (variable) => !["longitude", "latitude", "time"].includes(variable.name)
+  );
 
-  const { value: X, offset: xOffset, scale: xScale } = getValue(file, "x");
-  const { value: Y, offset: yOffset, scale: yScale } = getValue(file, "y");
-  const { value, offset, scale, fill } = getValue(file, "LST");
-  const { projection, perspectivePointHeight } = getGeosProjection(file);
+  if (!variable) {
+    return [];
+  }
 
-  for (let i = 0; i < X.length; ++i) {
-    for (let j = 0; j < Y.length; ++j) {
-      const valueIndex = X.length * j + i;
+  const result: [number, number, number][] = [];
 
-      if (value[valueIndex] === fill) {
+  const values = data.getDataVariable(variable.name);
+  const longitude = data.getDataVariable("longitude");
+  const latitude = data.getDataVariable("latitude");
+  const { fill, offset, scale } = (
+    variable.attributes as Record<string, number | string>[]
+  ).reduce((acc, curr) => {
+    if (curr.name === "_FillValue") {
+      acc["fill"] = curr.value as number;
+    } else if (curr.name === "add_offset") {
+      acc["offset"] = curr.value as number;
+    } else if (curr.name === "scale_factor") {
+      acc["scale"] = curr.value as number;
+    }
+    return acc;
+  }, {}) as { fill: number; offset: number; scale: number };
+
+  for (let i = 0; i < longitude.length; ++i) {
+    for (let j = 0; j < latitude.length; ++j) {
+      const index = longitude.length * j + i;
+      const value: number = values[index];
+
+      if (value === fill || Number.isNaN(value)) {
         continue;
       }
 
-      const trueValue = value[valueIndex] * scale + offset;
+      const x = longitude[i];
+      const y = latitude[j];
+      const trueValue = value * scale + offset;
 
-      if (Number.isNaN(trueValue)) {
-        continue;
-      }
-
-      const x = (X[i] * xScale + xOffset) * perspectivePointHeight;
-      const y = (Y[j] * yScale + yOffset) * perspectivePointHeight;
-
-      const coords = projection.inverse([x, y]) as [number, number];
-
-      values.push([...coords, trueValue]);
+      result.push([x, y, trueValue]);
     }
   }
 
-  file.close();
-
-  return values;
+  return result;
 }

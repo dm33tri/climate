@@ -1,13 +1,13 @@
-import { Dataset } from "~/atoms/dataset";
+import { DatasetResult, DatasetParams } from "~/atoms/dataset";
 
-export type Request = {
-  key: string;
-  type: "h3" | "grid";
-  source: "GOES-16" | "ERA5";
+export type Request = DatasetParams & {
   buffer: SharedArrayBuffer | ArrayBuffer;
 };
 
-export type Response = Dataset;
+export type Response = DatasetParams &
+  DatasetResult & {
+    buffer: SharedArrayBuffer | ArrayBuffer;
+  };
 
 const worker = new Worker(new URL("./worker.ts", import.meta.url), {
   type: "module",

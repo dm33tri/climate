@@ -63,7 +63,7 @@ export function Layer() {
         initialValues={{
           type: "h3",
           palette: "RdYlGn",
-          opacity: 1,
+          opacity: 0.5,
           blendMode: "normal",
           ...layer,
         }}

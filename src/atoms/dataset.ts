@@ -5,11 +5,14 @@ import { load } from "~/worker";
 
 export type DatasetParams = {
   key: string;
+  path: string;
+  payload?: Record<string, string | number>;
   source: "GOES-16" | "ERA5";
   type: "h3" | "grid";
 };
 
-export type Dataset = DatasetParams & {
+export type DatasetResult = {
+  key: string;
   buffer: ArrayBuffer | SharedArrayBuffer;
   count: number;
   min: number;
@@ -17,18 +20,20 @@ export type Dataset = DatasetParams & {
   date: Date;
 };
 
+export type Dataset = DatasetParams & DatasetResult;
+
 const MAX_BUFFER_SIZE = 256 * 1024 * 1024; // 256 MB
 
 export const datasets = atomFamily(
-  ({ key, type, source }: DatasetParams) => {
+  (params: DatasetParams) => {
     return atom(async () => {
-      const cached = (await idb.get(key)) as Dataset;
+      const cached = (await idb.get(params.key)) as Dataset;
       if (cached) {
         return cached;
       }
       const buffer = new SharedArrayBuffer(MAX_BUFFER_SIZE);
-      const data = await load({ key, buffer, type, source });
-      // await idb.set(key, { ...data, });
+      const data = await load({ ...params, buffer });
+
       return data;
     });
   },

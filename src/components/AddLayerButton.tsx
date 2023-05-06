@@ -10,7 +10,7 @@ export function AddLayerButton() {
   return (
     <Button
       icon={<PlusOutlined />}
-      onClick={() => setEditLayer({ opacity: 1, blendMode: "normal" })}
+      onClick={() => setEditLayer({})}
       type="primary"
       className="w-full"
     >

@@ -45,7 +45,6 @@ export const onRequest: PagesFunction<Env> = async (context) => {
         }),
       }
     );
-
     const json = await response.json<CDSReply>();
 
     if (json.state === "completed") {
