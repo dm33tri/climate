@@ -116,9 +116,9 @@ export function Side() {
             />
           </Col>
         </Row>
-        <Row gutter={8}>
-          <Col span={8}>Projection</Col>
-          <Col span={16}>
+        <Row gutter={8} align="middle">
+          <Col span={6}>Projection</Col>
+          <Col span={18}>
             <Select
               style={{ width: "100%" }}
               value={projection}
@@ -139,18 +139,53 @@ export function Side() {
             />
           </Col>
         </Row>
-        <Row>
-          <Col span={8}>Date</Col>
-          <Col span={16}>
+        <Row gutter={8} align="middle">
+          <Col span={6}>Date</Col>
+          <Col span={11}>
             <DatePicker
-              showTime
               style={{ width: "100%" }}
               value={date}
-              onChange={(date) => {
-                if (date) {
-                  setDate(date);
+              onChange={(value) => {
+                if (value) {
+                  setDate(value);
                 }
               }}
+            />
+          </Col>
+          <Col span={7}>
+            <Select
+              defaultValue="0"
+              style={{ width: "100%" }}
+              value={date.get("hour").toString()}
+              onChange={(value) => {
+                setDate(date.startOf("day").set("hour", parseInt(value)));
+              }}
+              options={[
+                { value: "0", label: "00:00" },
+                { value: "1", label: "01:00" },
+                { value: "2", label: "02:00" },
+                { value: "3", label: "03:00" },
+                { value: "4", label: "04:00" },
+                { value: "5", label: "05:00" },
+                { value: "6", label: "06:00" },
+                { value: "7", label: "07:00" },
+                { value: "8", label: "08:00" },
+                { value: "9", label: "09:00" },
+                { value: "10", label: "10:00" },
+                { value: "11", label: "11:00" },
+                { value: "12", label: "12:00" },
+                { value: "13", label: "13:00" },
+                { value: "14", label: "14:00" },
+                { value: "15", label: "15:00" },
+                { value: "16", label: "16:00" },
+                { value: "17", label: "17:00" },
+                { value: "18", label: "18:00" },
+                { value: "19", label: "19:00" },
+                { value: "20", label: "20:00" },
+                { value: "21", label: "21:00" },
+                { value: "22", label: "22:00" },
+                { value: "23", label: "23:00" },
+              ]}
             />
           </Col>
         </Row>
