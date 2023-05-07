@@ -1,8 +1,8 @@
 import { unzipSync } from "fflate";
 import { NetCDFReader } from "@loaders.gl/netcdf";
 
-export async function loadEra5Data(path: string) {
-  const buffer = await new Promise<ArrayBuffer>((resolve) => {
+export async function loadEra5Data(path: string, initialVariable?: string) {
+  const buffer = await new Promise<ArrayBuffer>((resolve, reject) => {
     const makeFetch = (tries = 5) =>
       fetch(`/api/cds/${path}`)
         .then((response) => {
@@ -13,9 +13,11 @@ export async function loadEra5Data(path: string) {
           }
         })
         .then((data) => resolve(data))
-        .catch(() => {
+        .catch((error) => {
           if (tries > 0) {
             setTimeout(() => makeFetch(tries - 1), 4000);
+          } else {
+            reject(error);
           }
         });
     makeFetch();
@@ -23,12 +25,16 @@ export async function loadEra5Data(path: string) {
   const file = unzipSync(new Uint8Array(buffer))["data.nc"];
   const data = new NetCDFReader(file);
 
-  const variable = data.variables.find(
+  const variables = data.variables.filter(
     (variable) => !["longitude", "latitude", "time"].includes(variable.name)
   );
+  const variable =
+    variables.find((variable) => variable.name === initialVariable) ||
+    variables[0];
+  const variableNames = variables.map((variable) => variable.name);
 
   if (!variable) {
-    return [];
+    return { data: [], variables: variableNames };
   }
 
   const result: [number, number, number][] = [];
@@ -66,5 +72,5 @@ export async function loadEra5Data(path: string) {
     }
   }
 
-  return result;
+  return { data: result, variables: variableNames };
 }

@@ -23,6 +23,7 @@ import { useAtom } from "jotai";
 import ui from "~/atoms/ui";
 import { datetime } from "~/atoms/datetime";
 import { EditLayerButton } from "./EditLayerButton";
+import layer from "~/atoms/layer";
 
 export function Side() {
   const [date, setDate] = useAtom(datetime);
@@ -31,9 +32,45 @@ export function Side() {
   const columns: TableColumnsType<Layer> = [
     {
       title: "Layer",
-      dataIndex: "name",
       key: "name",
+      dataIndex: "name",
       width: "100%",
+      render: (value, layer) => {
+        if (
+          layer.dataset &&
+          layer.dataset.variables &&
+          layer.dataset.variables.length > 1
+        ) {
+          const variables = layer.dataset.variables;
+
+          return (
+            <Space direction="vertical">
+              {value}
+              <Select
+                style={{ width: "100%" }}
+                defaultValue={variables[0]}
+                value={layer.variable || variables[0]}
+                onChange={(variable) => {
+                  setLayers({
+                    action: "edit",
+                    layer: {
+                      name: layer.name,
+                      variable:
+                        variable === variables[0] ? undefined : variable,
+                    },
+                  });
+                }}
+                options={variables.map((variable) => ({
+                  label: variable,
+                  value: variable,
+                }))}
+              />
+            </Space>
+          );
+        }
+
+        return value;
+      },
     },
     {
       title: <Button type="text" size="small" icon={<MoreOutlined />} />,

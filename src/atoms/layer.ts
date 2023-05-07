@@ -2,7 +2,7 @@ import { atom } from "jotai";
 import { atomFamily, atomWithStorage, loadable } from "jotai/utils";
 import type { Layer as DeckGLLayer } from "@deck.gl/core/typed";
 
-import { datasets } from "~/atoms/dataset";
+import { Dataset, datasets } from "~/atoms/dataset";
 import { datetime } from "~/atoms/datetime";
 import { getDeckGlLayer, getParams } from "~/utils/layer";
 
@@ -14,6 +14,7 @@ export type LayerSettings = {
   opacity: number;
   visible: boolean;
 
+  variable?: string;
   // can override global date
   year?: string;
   month?: string;
@@ -24,6 +25,7 @@ export type LayerSettings = {
 export type Layer = LayerSettings & {
   state: "loading" | "loaded" | "error";
   layer?: DeckGLLayer;
+  dataset?: Dataset;
 };
 
 type PartialSettings = Partial<LayerSettings> & Pick<LayerSettings, "name">;
@@ -93,6 +95,7 @@ const family = atomFamily((_name: Layer["name"]) => {
         return {
           ...settings,
           state: "loaded",
+          dataset: dataset.data,
           layer: getDeckGlLayer(dataset.data, settings as LayerSettings),
         };
       }

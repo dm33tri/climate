@@ -3,8 +3,12 @@ import type { Dataset, File } from "h5wasm";
 
 export function getValue(file: File, path: string) {
   const dataset = file.get(path) as Dataset;
-  const [offset] = dataset.attrs["add_offset"].value as Float32Array;
-  const [scale] = dataset.attrs["scale_factor"].value as Float32Array;
+  const [offset] = dataset.attrs["add_offset"]
+    ? (dataset.attrs["add_offset"].value as Float32Array)
+    : [0];
+  const [scale] = dataset.attrs["scale_factor"]
+    ? (dataset.attrs["scale_factor"].value as Float32Array)
+    : [1];
   const value = dataset.value as Float32Array;
 
   if (!dataset.attrs["_FillValue"]) {

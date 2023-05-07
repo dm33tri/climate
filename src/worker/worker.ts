@@ -1,5 +1,5 @@
 import * as idb from "idb-keyval";
-import { Request, Response } from "~/worker";
+import { Request, Response, Error } from "~/worker";
 import { loadGoesData } from "~/loaders/goes";
 import { h3bin } from "~/utils/h3bin";
 import { loadEra5Data } from "~/loaders/era5";
@@ -9,8 +9,12 @@ export const elementSize = {
   grid: 3 * Float32Array.BYTES_PER_ELEMENT,
 };
 
-function onLoad(response: Response) {
+function onLoad(response: Response | Error) {
   postMessage(response);
+
+  if ("error" in response) {
+    return;
+  }
 
   const length = response.count * elementSize[response.type];
 
@@ -30,20 +34,31 @@ addEventListener("message", async ({ data: request }: { data: Request }) => {
     self.document = { currentScript: {} }; // hack for worker
   }
 
-  const { path, buffer, source, type } = request;
+  const { path, buffer, source, type, variable } = request;
 
-  const data: [number, number, number][] | null =
-    (source === "ERA5" && (await loadEra5Data(path))) ||
-    (source === "GOES-16" && (await loadGoesData(path))) ||
-    null;
+  try {
+    const data =
+      (source === "ERA5" && (await loadEra5Data(path, variable))) ||
+      (source === "GOES-16" && (await loadGoesData(path, variable))) ||
+      null;
 
-  const result = (data && type === "h3" && h3bin(data, 4, buffer)) || null;
+    if (data == null) {
+      return onLoad({ ...request, error: "Data error" });
+    }
 
-  if (result) {
-    onLoad({
-      ...request,
-      ...result,
-      date: new Date(),
-    });
+    const result =
+      (data && type === "h3" && h3bin(data.data, 4, buffer)) || null;
+
+    if (result) {
+      onLoad({
+        ...request,
+        ...result,
+        variables: data.variables,
+        date: new Date(),
+      });
+    }
+  } catch (error) {
+    console.warn(error);
+    onLoad({ ...request, error });
   }
 });

@@ -17,9 +17,10 @@ export function getParams(
   }
   const { product, type } = layer;
   const [source, variable] = product.split("/");
-  const key = `${type}/${product}/${variable}/${date.format(
-    "YYYY/MM/DD/HH:mm"
-  )}`;
+  const key =
+    `${type}/${product}/${variable}` +
+    `/${date.format("YYYY/MM/DD/HH:mm")}` +
+    (layer.variable ? `/${layer.variable}` : "");
 
   if (source.startsWith("GOES-16")) {
     const year = `${date.year()}`;
@@ -27,7 +28,13 @@ export function getParams(
     const hour = `${date.hour()}`.padStart(2, "0");
     const path = `${variable}/${year}/${day}/${hour}`;
 
-    return { type, key, path, source: "GOES-16" as const };
+    return {
+      type,
+      key,
+      path,
+      variable: layer.variable,
+      source: "GOES-16" as const,
+    };
   } else if (source.includes("era5")) {
     const year = `${date.year()}`;
     const month = `${date.month()}`.padStart(2, "0");
@@ -35,7 +42,13 @@ export function getParams(
     const time = date.format("HH:mm");
     const path = `${source}/${variable}/${year}/${month}/${day}/${time}`;
 
-    return { type, key, path, source: "ERA5" as const };
+    return {
+      type,
+      key,
+      path,
+      variable: layer.variable,
+      source: "ERA5" as const,
+    };
   }
 }
 
@@ -45,12 +58,12 @@ export function getDeckGlLayer(
   dataset: Dataset,
   layerSettings: LayerSettings
 ): DeckGLLayer | undefined {
-  const { buffer, count, min, max } = dataset;
-  const { name, product, type, palette, opacity, visible } = layerSettings;
-  const key = `${name}/${product}/${type}/${palette}}`;
+  const { buffer, count, min, max, key } = dataset;
+  const { name, type, palette, opacity, visible } = layerSettings;
+  const layerKey = `${key}/${palette}`;
   const path = palette.split(".");
   const scale = chroma.scale(colors[path[0]][path[1]]).domain([min, max]);
-  if (!layers.has(key)) {
+  if (!layers.has(layerKey)) {
     if (type === "h3") {
       const offset = Int32Array.BYTES_PER_ELEMENT;
       const step = offset * 2 + Float32Array.BYTES_PER_ELEMENT;
@@ -76,12 +89,12 @@ export function getDeckGlLayer(
         },
       });
 
-      layers.set(key, deckGlLayer);
+      layers.set(layerKey, deckGlLayer);
     }
   } else {
-    const deckGlLayer = layers.get(key)!.clone({ visible, opacity });
-    layers.set(key, deckGlLayer);
+    const deckGlLayer = layers.get(layerKey)!.clone({ visible, opacity });
+    layers.set(layerKey, deckGlLayer);
   }
 
-  return layers.get(key);
+  return layers.get(layerKey);
 }

@@ -9,6 +9,7 @@ export type DatasetParams = {
   payload?: Record<string, string | number>;
   source: "GOES-16" | "ERA5";
   type: "h3" | "grid";
+  variable?: string;
 };
 
 export type DatasetResult = {
@@ -18,6 +19,7 @@ export type DatasetResult = {
   min: number;
   max: number;
   date: Date;
+  variables?: string[];
 };
 
 export type Dataset = DatasetParams & DatasetResult;
