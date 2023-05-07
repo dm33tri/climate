@@ -1,6 +1,7 @@
 import * as h3 from "h3-js";
 import { Dayjs } from "dayjs";
 import chroma from "chroma-js";
+import { GridLayer } from "@deck.gl/aggregation-layers/typed";
 import { H3HexagonLayer } from "@deck.gl/geo-layers/typed";
 import type { Layer as DeckGLLayer } from "@deck.gl/core/typed";
 
@@ -62,13 +63,16 @@ export function getDeckGlLayer(
   const { name, type, palette, opacity, visible } = layerSettings;
   const layerKey = `${key}/${palette}`;
   const path = palette.split(".");
-  const scale = chroma.scale(colors[path[0]][path[1]]).domain([min, max]);
+  const colorScale = colors[path[0]][path[1]];
+  const scale = chroma.scale(colorScale).domain([min, max]);
+
   if (!layers.has(layerKey)) {
     if (type === "h3") {
       const offset = Int32Array.BYTES_PER_ELEMENT;
       const step = offset * 2 + Float32Array.BYTES_PER_ELEMENT;
       const length = count * step;
       const view = new DataView(buffer, 0, length);
+
       const deckGlLayer = new H3HexagonLayer({
         id: name,
         filled: true,
@@ -76,7 +80,7 @@ export function getDeckGlLayer(
         blend: true,
         opacity: opacity,
         visible: visible,
-        data: { length: count, palette },
+        data: { length: count },
         wireframe: false,
         getHexagon: (_, { index }) => {
           const left = view.getInt32(step * index);
@@ -86,6 +90,31 @@ export function getDeckGlLayer(
         getFillColor: (_, { index }) => {
           const value = view.getFloat32(step * index + offset * 2);
           return [...scale(value).rgb(), 255];
+        },
+      });
+
+      layers.set(layerKey, deckGlLayer);
+    } else if (type === "grid") {
+      const view = new Float32Array(buffer, 0, count * 3);
+      const colorRange = chroma
+        .scale(colorScale)
+        .colors(colorScale.length, null)
+        .map((color) => [...color.rgb(), 255]);
+      const deckGlLayer = new GridLayer({
+        id: name,
+        cellSize: 10000,
+        pickable: true,
+        extruded: false,
+        opacity: opacity,
+        visible: visible,
+        colorRange: colorRange as any,
+        colorAggregation: "MEAN",
+        data: { length: count },
+        getPosition: (_, { index }) => {
+          return [view[index * 3], view[index * 3 + 1]];
+        },
+        getColorWeight: (_, { index }) => {
+          return view[index * 3 + 2];
         },
       });
 

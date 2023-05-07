@@ -4,15 +4,12 @@ import {
   Space,
   TableColumnsType,
   Layout,
-  Switch,
   Select,
   DatePicker,
   Row,
   Col,
-  Spin,
 } from "antd";
 import {
-  ExclamationCircleOutlined,
   ExclamationCircleTwoTone,
   LoadingOutlined,
   MoreOutlined,
@@ -23,7 +20,6 @@ import { useAtom } from "jotai";
 import ui from "~/atoms/ui";
 import { datetime } from "~/atoms/datetime";
 import { EditLayerButton } from "./EditLayerButton";
-import layer from "~/atoms/layer";
 
 export function Side() {
   const [date, setDate] = useAtom(datetime);
@@ -147,6 +143,7 @@ export function Side() {
           <Col span={8}>Date</Col>
           <Col span={16}>
             <DatePicker
+              showTime
               style={{ width: "100%" }}
               value={date}
               onChange={(date) => {

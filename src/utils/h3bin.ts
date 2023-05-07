@@ -33,25 +33,3 @@ export function h3bin(
 
   return { type: "h3" as const, resolution, buffer, count: index, min, max };
 }
-
-export function* h3binIter({
-  buffer,
-  count,
-}: {
-  type: "h3";
-  buffer: SharedArrayBuffer | ArrayBuffer;
-  count: number;
-}) {
-  const view = new DataView(buffer);
-
-  const offset = Int32Array.BYTES_PER_ELEMENT * 2;
-  const step = offset + Float32Array.BYTES_PER_ELEMENT;
-
-  for (let i = 0; i < count; ++i) {
-    const left = view.getInt32(i * step);
-    const right = view.getInt32(i * step + offset);
-    const hex = h3.splitLongToH3Index(left, right);
-    const value = view.getFloat32(i * step + offset * 2);
-    yield { hex, value };
-  }
-}

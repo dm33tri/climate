@@ -121,8 +121,8 @@ export function Layer() {
         <Form.Item name="type" label="Type" rules={[{ required: true }]}>
           <Select
             options={[
-              { label: "Hexagon", value: "h3" },
               { label: "Grid", value: "grid" },
+              { label: "Hexagon", value: "h3" },
             ]}
           />
         </Form.Item>

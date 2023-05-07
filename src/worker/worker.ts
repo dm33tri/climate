@@ -3,6 +3,7 @@ import { Request, Response, Error } from "~/worker";
 import { loadGoesData } from "~/loaders/goes";
 import { h3bin } from "~/utils/h3bin";
 import { loadEra5Data } from "~/loaders/era5";
+import { gridBin } from "~/utils/grid";
 
 export const elementSize = {
   h3: 2 * Int32Array.BYTES_PER_ELEMENT + Float32Array.BYTES_PER_ELEMENT,
@@ -47,7 +48,9 @@ addEventListener("message", async ({ data: request }: { data: Request }) => {
     }
 
     const result =
-      (data && type === "h3" && h3bin(data.data, 4, buffer)) || null;
+      (data && type === "h3" && h3bin(data.data, 4, buffer)) ||
+      (data && type === "grid" && gridBin(data.data, 1000, buffer)) ||
+      null;
 
     if (result) {
       onLoad({
@@ -58,7 +61,6 @@ addEventListener("message", async ({ data: request }: { data: Request }) => {
       });
     }
   } catch (error) {
-    console.warn(error);
     onLoad({ ...request, error });
   }
 });

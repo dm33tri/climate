@@ -2,7 +2,7 @@ import { atomWithStorage } from "jotai/utils";
 
 export const projection = atomWithStorage<"mercator" | "globe">(
   "projection",
-  "mercator"
+  "globe"
 );
 
 export default { projection };
