@@ -44,28 +44,26 @@ export function Side() {
           const variables = layer.dataset.variables;
 
           return (
-            <Space direction="vertical">
-              {value}
-              <Select
-                style={{ width: "100%" }}
-                defaultValue={variables[0]}
-                value={layer.variable || variables[0]}
-                onChange={(variable) => {
-                  setLayers({
-                    action: "edit",
-                    layer: {
-                      name: layer.name,
-                      variable:
-                        variable === variables[0] ? undefined : variable,
-                    },
-                  });
-                }}
-                options={variables.map((variable) => ({
-                  label: variable,
-                  value: variable,
-                }))}
-              />
-            </Space>
+            <Select
+              style={{ width: "100%", margin: "-4px -12px" }}
+              defaultValue={variables[0]}
+              value={layer.variable || variables[0]}
+              disabled={!layer.visible}
+              onChange={(variable) => {
+                setLayers({
+                  action: "edit",
+                  layer: {
+                    name: layer.name,
+                    variable: variable === variables[0] ? undefined : variable,
+                  },
+                });
+              }}
+              options={variables.map((variable) => ({
+                label: `${value} / ${variable}`,
+                value: variable,
+              }))}
+              bordered={false}
+            />
           );
         }
 
