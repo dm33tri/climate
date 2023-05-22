@@ -10,12 +10,17 @@
     "@ant-design/icons": "^5.0.1",
     "@aws-sdk/client-s3": "^3.326.0",
     "@loaders.gl/core": "^3.3.4",
+    "@loaders.gl/gis": "^3.4.2",
     "@loaders.gl/netcdf": "^3.3.4",
     "@math.gl/core": "^3.6.3",
     "@tanstack/react-query": "^4.29.5",
+    "@turf/turf": "^6.5.0",
     "antd": "^5.4.6",
     "chroma-js": "^2.4.2",
     "d3-delaunay": "^6.0.4",
+    "d3-geo": "^3.1.0",
+    "d3-geo-voronoi": "^2.0.1",
+    "d3-tricontour": "^1.0.2",
     "dayjs": "^1.11.7",
     "deck.gl": "^8.9.12",
     "fflate": "^0.7.4",
@@ -31,6 +36,8 @@
     "@cloudflare/kv-asset-handler": "^0.3.0",
     "@cloudflare/workers-types": "^4.20230419.0",
     "@types/chroma-js": "^2.4.0",
+    "@types/d3-geo": "^3.0.3",
+    "@types/delaunator": "^5.0.0",
     "@types/pako": "^2.0.0",
     "@types/proj4": "^2.5.2",
     "@types/react-color": "^3.0.6",
@@ -42,6 +49,6 @@
     "vite": "^4.3.5",
     "vite-plugin-glsl": "^1.1.2",
     "vitest": "^0.30.1",
-    "wrangler": "^2.18.0"
+    "wrangler": "^3.0.0"
   }
 }

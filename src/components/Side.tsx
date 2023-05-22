@@ -49,7 +49,7 @@ export function Side() {
                 setLayers({
                   action: "edit",
                   layer: {
-                    name: layer.name,
+                    key: layer.key,
                     variable: variable === variables[0] ? undefined : variable,
                   },
                 });
@@ -85,18 +85,18 @@ export function Side() {
               columns={columns}
               dataSource={layers}
               footer={AddLayerButton}
-              rowKey="name"
+              rowKey="key"
               rowSelection={{
                 type: "checkbox",
                 onSelect: (layer, selected) => {
                   setLayers({
                     action: "edit",
-                    layer: { name: layer.name, visible: selected },
+                    layer: { key: layer.key, visible: selected },
                   });
                 },
                 selectedRowKeys: layers
                   .filter((layer) => layer.visible)
-                  .map((layer) => layer.name),
+                  .map((layer) => layer.key),
                 renderCell: (_checked, layer, _index, _origin) =>
                   (layer.state === "loading" && (
                     <LoadingOutlined

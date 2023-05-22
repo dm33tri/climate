@@ -4,10 +4,12 @@ import { loadGoesData } from "~/loaders/goes";
 import { h3bin } from "~/utils/h3bin";
 import { loadEra5Data } from "~/loaders/era5";
 import { gridBin } from "~/utils/grid";
+import { contour } from "~/utils/contour";
 
 export const elementSize = {
   h3: 2 * Int32Array.BYTES_PER_ELEMENT + Float32Array.BYTES_PER_ELEMENT,
   grid: 3 * Float32Array.BYTES_PER_ELEMENT,
+  contour: 2 * Float32Array.BYTES_PER_ELEMENT,
 };
 
 function onLoad(response: Response | Error) {
@@ -17,16 +19,20 @@ function onLoad(response: Response | Error) {
     return;
   }
 
-  const length = response.count * elementSize[response.type];
+  if (response.type === "h3" || response.type === "grid") {
+    const length = response.count * elementSize[response.type];
 
-  const destination = new Uint8ClampedArray(length);
-  const source = new Uint8ClampedArray(response.buffer, 0, length);
-  destination.set(source);
+    const destination = new Uint8ClampedArray(length);
+    const source = new Uint8ClampedArray(response.buffer, 0, length);
+    destination.set(source);
 
-  idb.set(response.key, {
-    ...response,
-    buffer: destination.buffer,
-  });
+    idb.set(response.key, {
+      ...response,
+      buffer: destination.buffer,
+    });
+  } else {
+    idb.set(response.key, { ...response, buffer: undefined });
+  }
 }
 
 addEventListener("message", async ({ data: request }: { data: Request }) => {
@@ -38,27 +44,49 @@ addEventListener("message", async ({ data: request }: { data: Request }) => {
   const { path, buffer, source, type, variable } = request;
 
   try {
-    const data =
-      (source === "ERA5" && (await loadEra5Data(path, variable))) ||
-      (source === "GOES-16" && (await loadGoesData(path, variable))) ||
-      null;
+    let data;
+    switch (source) {
+      case "ERA5":
+        data = await loadEra5Data(path, variable);
+        break;
+      case "GOES-16":
+        data = await loadGoesData(path, variable);
+        break;
+      default:
+        data = null;
+    }
 
     if (data == null) {
       return onLoad({ ...request, error: "Data error" });
     }
 
-    const result =
-      (data && type === "h3" && h3bin(data.data, 4, buffer)) ||
-      (data && type === "grid" && gridBin(data.data, 1000, buffer)) ||
-      null;
+    const { min, max } = data;
+
+    let result;
+
+    switch (type) {
+      case "h3":
+        result = h3bin(data.data, buffer, { resolution: 4 });
+        break;
+      case "grid":
+        result = gridBin(data.data, buffer, { resolution: 1000 });
+        break;
+      case "contour":
+        result = contour(data.data, { min, max, breaks: 8 });
+        break;
+      default:
+        result = null;
+    }
 
     if (result) {
       onLoad({
-        ...request,
         ...result,
-        variables: data.variables,
+        ...request,
+        min,
+        max,
         date: new Date(),
-      });
+        variables: data.variables,
+      } as Response);
     }
   } catch (error) {
     onLoad({ ...request, error });

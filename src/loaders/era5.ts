@@ -1,26 +1,21 @@
 import { unzipSync } from "fflate";
 import { NetCDFReader } from "@loaders.gl/netcdf";
 
-export async function loadEra5Data(path: string, initialVariable?: string) {
-  const buffer = await new Promise<ArrayBuffer>((resolve, reject) => {
-    const makeFetch = (tries = 5) =>
-      fetch(`/api/cds/${path}`)
-        .then((response) => {
-          if (response.ok) {
-            return response.arrayBuffer();
-          } else {
-            throw response.statusText;
-          }
-        })
-        .then((data) => resolve(data))
-        .catch((error) => {
-          if (tries > 0) {
-            setTimeout(() => makeFetch(tries - 1), 4000);
-          } else {
-            reject(error);
-          }
-        });
-    makeFetch();
+export async function loadEra5Data(
+  path: string,
+  initialVariable?: string
+): Promise<{
+  data: [number, number, number][];
+  variables: string[];
+  min: number;
+  max: number;
+}> {
+  const buffer = await fetch(`/api/cds/${path}`).then(async (response) => {
+    if (response.ok) {
+      return await response.arrayBuffer();
+    } else {
+      throw await response.json();
+    }
   });
   const file = unzipSync(new Uint8Array(buffer))["data.nc"];
   const data = new NetCDFReader(file);
@@ -34,14 +29,17 @@ export async function loadEra5Data(path: string, initialVariable?: string) {
   const variableNames = variables.map((variable) => variable.name);
 
   if (!variable) {
-    return { data: [], variables: variableNames };
+    throw {};
   }
 
   const result: [number, number, number][] = [];
+  let min = 50000;
+  let max = -50000;
 
   const values = data.getDataVariable(variable.name);
   const longitude = data.getDataVariable("longitude");
   const latitude = data.getDataVariable("latitude");
+
   const { fill, offset, scale } = (
     variable.attributes as Record<string, number | string>[]
   ).reduce((acc, curr) => {
@@ -60,17 +58,24 @@ export async function loadEra5Data(path: string, initialVariable?: string) {
       const index = longitude.length * j + i;
       const value: number = values[index];
 
-      if (value === fill || Number.isNaN(value)) {
-        continue;
-      }
-
-      const x = longitude[i];
       const y = latitude[j];
-      const trueValue = value * scale + offset;
+      let x = longitude[i];
+      if (x > 180) {
+        x -= 360;
+      }
+      const trueValue =
+        value === fill || Number.isNaN(value) ? 0 : value * scale + offset;
+
+      if (trueValue && trueValue < min) {
+        min = trueValue;
+      }
+      if (trueValue && trueValue > max) {
+        max = trueValue;
+      }
 
       result.push([x, y, trueValue]);
     }
   }
 
-  return { data: result, variables: variableNames };
+  return { data: result, variables: variableNames, min, max };
 }

@@ -36,17 +36,20 @@ export function Layer() {
   }, [layer]);
 
   const remove = () => {
-    if (layer && layer.name) {
-      setLayers({ action: "remove", layer: { name: layer.name } });
+    if (layer && layer.key) {
+      setLayers({ action: "remove", layer: { key: layer.key } });
     }
     setLayer(null);
   };
 
   const onFinish = (settings: LayerSettings) => {
-    if (layer && layer.name) {
+    if (layer && layer.key) {
       setLayers({ action: "edit", layer: { ...layer, ...settings } });
     } else {
-      setLayers({ action: "add", layer: { ...layer, ...settings } });
+      setLayers({
+        action: "add",
+        layer: { ...layer, ...settings, key: `layer${Date.now()}` },
+      });
     }
     cancel();
   };
@@ -59,7 +62,7 @@ export function Layer() {
 
   return (
     <Drawer
-      title={layer && layer.name ? "Edit layer" : "Add layer"}
+      title={layer && layer.key ? "Edit layer" : "Add layer"}
       width={640}
       afterOpenChange={(open) => {
         if (!open) {
@@ -103,6 +106,9 @@ export function Layer() {
           ...layer,
         }}
       >
+        <Form.Item name="key" hidden>
+          <Input />
+        </Form.Item>
         <Form.Item name="product" label="Product" rules={[{ required: true }]}>
           <TreeSelect
             treeData={tree}
@@ -123,6 +129,7 @@ export function Layer() {
             options={[
               { label: "Grid", value: "grid" },
               { label: "Hexagon", value: "h3" },
+              { label: "Contour", value: "contour" },
             ]}
           />
         </Form.Item>

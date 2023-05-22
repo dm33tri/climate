@@ -1,7 +1,7 @@
 export function gridBin(
   data: [number, number, number][],
-  resolution: number,
-  buffer: SharedArrayBuffer | ArrayBuffer
+  buffer: SharedArrayBuffer | ArrayBuffer,
+  { resolution }: { resolution: number }
 ) {
   let min = Infinity;
   let max = -Infinity;
@@ -9,6 +9,9 @@ export function gridBin(
 
   for (let i = 0; i < data.length; ++i) {
     const [lon, lat, value] = data[i];
+    if (!value) {
+      continue;
+    }
     if (min > value) {
       min = value;
     }
@@ -21,8 +24,6 @@ export function gridBin(
   }
 
   return {
-    min,
-    max,
     buffer,
     resolution,
     count: data.length,

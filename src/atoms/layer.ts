@@ -7,9 +7,10 @@ import { datetime } from "~/atoms/datetime";
 import { getDeckGlLayer, getParams } from "~/utils/layer";
 
 export type LayerSettings = {
+  key: string;
   name: string;
   product: string;
-  type: "h3" | "grid";
+  type: "h3" | "grid" | "contour" | "raw";
   palette: string;
   opacity: number;
   visible: boolean;
@@ -28,7 +29,7 @@ export type Layer = LayerSettings & {
   dataset?: Dataset;
 };
 
-type PartialSettings = Partial<LayerSettings> & Pick<LayerSettings, "name">;
+type PartialSettings = Partial<LayerSettings> & Pick<LayerSettings, "key">;
 
 type Init = {
   action: "init";
@@ -39,18 +40,37 @@ type Add = {
 };
 type Edit = {
   action: "edit";
-  layer: Partial<LayerSettings> & Pick<LayerSettings, "name">;
+  layer: Partial<LayerSettings> & Pick<LayerSettings, "key">;
 };
 type Remove = {
   action: "remove";
-  layer: Partial<LayerSettings> & Pick<LayerSettings, "name">;
+  layer: Partial<LayerSettings> & Pick<LayerSettings, "key">;
 };
 
 export type Update = Init | Add | Edit | Remove;
 
-const settings = atomWithStorage<LayerSettings[]>("layers", []);
+const settings = atomWithStorage<LayerSettings[]>("layers", [
+  {
+    visible: true,
+    key: "layer0",
+    product: "reanalysis-era5-land/2m_temperature",
+    name: "Temperature Contour",
+    palette: "Constant.White",
+    type: "contour",
+    opacity: 1,
+  },
+  {
+    visible: true,
+    key: "layer1",
+    product: "reanalysis-era5-land/2m_temperature",
+    name: "Temperature Fill",
+    palette: "Divergent.RdYlGn",
+    type: "h3",
+    opacity: 0.75,
+  },
+]);
 
-const family = atomFamily((_name: Layer["name"]) => {
+const family = atomFamily((_name: Layer["key"]) => {
   const layerSettings = atom<PartialSettings | null>(null);
   return atom(
     (get) => {
@@ -111,29 +131,29 @@ export const edit = atom<Partial<LayerSettings> | null>(null);
 export const layers = atom(
   (get) =>
     get(settings)
-      .map(({ name }) => get(family(name)))
+      .map(({ key }) => get(family(key)))
       .filter((layer): layer is Layer => layer != null),
   (get, set, update: Update) => {
     if (update.action === "init") {
       for (const layer of get(settings)) {
-        set(family(layer.name), layer);
+        set(family(layer.key), layer);
       }
     }
 
     if (update.action === "add") {
-      set(family(update.layer.name), update.layer);
+      set(family(update.layer.key), update.layer);
       set(settings, (settings) => [...settings, update.layer]);
     }
 
     if (update.action === "edit") {
       const layer = get(settings).find(
-        (layer) => layer.name === update.layer.name
+        (layer) => layer.key === update.layer.key
       );
       const updatedLayer = { ...layer, ...update.layer };
-      set(family(update.layer.name), updatedLayer);
+      set(family(update.layer.key), updatedLayer);
       set(settings, (settings) =>
         settings.map((layer) => {
-          if (layer.name !== update.layer.name) {
+          if (layer.key !== update.layer.key) {
             return layer;
           }
           return {
@@ -145,9 +165,9 @@ export const layers = atom(
     }
 
     if (update.action === "remove") {
-      set(family(update.layer.name), null);
+      set(family(update.layer.key), null);
       set(settings, (settings) =>
-        settings.filter((layer) => layer.name !== update.layer.name)
+        settings.filter((layer) => layer.key !== update.layer.key)
       );
     }
   }

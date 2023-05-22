@@ -2,25 +2,39 @@ import * as idb from "idb-keyval";
 import { atom } from "jotai";
 import { atomFamily } from "jotai/utils";
 import { load } from "~/worker";
+import { BinaryFeatures } from "@loaders.gl/schema";
 
 export type DatasetParams = {
   key: string;
   path: string;
   payload?: Record<string, string | number>;
   source: "GOES-16" | "ERA5";
-  type: "h3" | "grid";
+  type: "h3" | "grid" | "contour" | "raw";
   variable?: string;
 };
 
 export type DatasetResult = {
   key: string;
-  buffer: ArrayBuffer | SharedArrayBuffer;
-  count: number;
   min: number;
   max: number;
   date: Date;
   variables?: string[];
-};
+  availableDates?: Date[];
+} & (
+  | {
+      type: "h3" | "grid" | "raw";
+      key: string;
+
+      count: number;
+
+      buffer: ArrayBuffer | SharedArrayBuffer;
+    }
+  | {
+      type: "contour";
+
+      features: BinaryFeatures;
+    }
+);
 
 export type Dataset = DatasetParams & DatasetResult;
 

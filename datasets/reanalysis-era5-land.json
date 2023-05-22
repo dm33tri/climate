@@ -2,7 +2,7 @@
   {
     "title": "ERA5-Land hourly data",
     "value": "reanalysis-era5-land",
-    "available_dates": ["1950-01-01", "2023-04-27"],
+    "available_dates": ["1950-01-01", "2023-05-08"],
     "available_times": [
       "00:00",
       "01:00",

@@ -82,14 +82,14 @@ export const colors = {
     Greys: chroma.brewer["Greys"],
   },
   Divergent: {
-    Spectral: chroma.brewer["Spectral"],
-    RdYlGn: chroma.brewer["RdYlGn"],
-    RdBu: chroma.brewer["RdBu"],
-    PiYG: chroma.brewer["PiYG"],
-    PRGn: chroma.brewer["PRGn"],
-    RdYlBu: chroma.brewer["RdYlBu"],
-    BrBG: chroma.brewer["BrBG"],
-    RdGy: chroma.brewer["RdGy"],
+    Spectral: chroma.brewer["Spectral"].reverse(),
+    RdYlGn: chroma.brewer["RdYlGn"].reverse(),
+    RdBu: chroma.brewer["RdBu"].reverse(),
+    PiYG: chroma.brewer["PiYG"].reverse(),
+    PRGn: chroma.brewer["PRGn"].reverse(),
+    RdYlBu: chroma.brewer["RdYlBu"].reverse(),
+    BrBG: chroma.brewer["BrBG"].reverse(),
+    RdGy: chroma.brewer["RdGy"].reverse(),
   },
   Categorical: {
     D3: [
@@ -328,6 +328,10 @@ export const colors = {
       "#9139fa",
       "#c543fa",
     ],
+  },
+  Constant: {
+    White: ["#ffffff"],
+    Black: ["#000000"],
   },
   Oceanography: {
     turbid: [

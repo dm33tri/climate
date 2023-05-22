@@ -2,19 +2,18 @@ import * as h3 from "h3-js";
 
 export function h3bin(
   data: [number, number, number][],
-  resolution: number,
-  buffer: SharedArrayBuffer | ArrayBuffer
+  buffer: SharedArrayBuffer | ArrayBuffer,
+  { resolution }: { resolution: number }
 ) {
-  let min = Infinity;
-  let max = -Infinity;
   const cells = new Map<string, [number, number]>();
 
   for (const [lon, lat, value] of data) {
+    if (!value) {
+      continue;
+    }
     const index = h3.latLngToCell(lat, lon, resolution);
     const [sum, count] = cells.get(index) || [0, 0];
     cells.set(index, [sum + value, count + 1]);
-    if (min > value) min = value;
-    if (max < value) max = value;
   }
 
   const view = new DataView(buffer);
@@ -31,5 +30,5 @@ export function h3bin(
     ++index;
   }
 
-  return { type: "h3" as const, resolution, buffer, count: index, min, max };
+  return { type: "h3" as const, resolution, buffer, count: index };
 }

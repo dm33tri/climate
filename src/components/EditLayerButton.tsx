@@ -14,6 +14,7 @@ export function EditLayerButton({ layer }: { layer: Layer }) {
       onClick={() => {
         const {
           name,
+          key,
           product,
           type,
           palette,
@@ -26,6 +27,7 @@ export function EditLayerButton({ layer }: { layer: Layer }) {
         } = layer;
         setEditLayer({
           name,
+          key,
           product,
           type,
           palette,

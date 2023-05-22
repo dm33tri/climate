@@ -8,6 +8,7 @@ type Env = {
 type CDSReply =
   | {
       state: "queued" | "running";
+      request_id: string;
     }
   | {
       state: "completed";
@@ -45,7 +46,30 @@ export const onRequest: PagesFunction<Env> = async (context) => {
         }),
       }
     );
-    const json = await response.json<CDSReply>();
+
+    let json = await response.json<CDSReply>();
+
+    if (json.state === "queued" || json.state === "running") {
+      const requestId = json.request_id;
+      for (let i = 0; i < 5; i++) {
+        await new Promise((resolve) => setTimeout(resolve, 4000));
+        const response = await fetch(
+          `https://cds.climate.copernicus.eu/api/v2/tasks/${requestId}`,
+          {
+            method: "GET",
+            headers: {
+              Accept: "application/json",
+              Authorization: `Basic ${btoa(context.env.CDS_API_KEY)}`,
+              "Content-Type": "application/json",
+            },
+          }
+        );
+        json = await response.json<CDSReply>();
+        if (json.state === "completed" || json.state === "failed") {
+          break;
+        }
+      }
+    }
 
     if (json.state === "completed") {
       const response = await fetch(json.location);
@@ -58,7 +82,7 @@ export const onRequest: PagesFunction<Env> = async (context) => {
 
       object = await context.env.R2.get(key);
     } else {
-      return response;
+      return Response.json(json, { status: 400 });
     }
   }
 

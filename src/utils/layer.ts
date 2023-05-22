@@ -1,9 +1,10 @@
 import * as h3 from "h3-js";
-import { Dayjs } from "dayjs";
 import chroma from "chroma-js";
-import { GridLayer } from "@deck.gl/aggregation-layers/typed";
+import { Dayjs } from "dayjs";
+import { GridLayer, ContourLayer } from "@deck.gl/aggregation-layers/typed";
 import { H3HexagonLayer } from "@deck.gl/geo-layers/typed";
-import type { Layer as DeckGLLayer } from "@deck.gl/core/typed";
+import { GeoJsonLayer } from "@deck.gl/layers/typed";
+import { Layer as DeckGLLayer } from "@deck.gl/core/typed";
 
 import { LayerSettings } from "~/atoms/layer";
 import { Dataset, DatasetParams } from "~/atoms/dataset";
@@ -59,57 +60,67 @@ export function getDeckGlLayer(
   dataset: Dataset,
   layerSettings: LayerSettings
 ): DeckGLLayer | undefined {
-  const { buffer, count, min, max, key } = dataset;
-  const { name, type, palette, opacity, visible } = layerSettings;
-  const layerKey = `${key}/${palette}`;
+  const { palette, opacity, visible } = layerSettings;
+  const key = `${dataset.key}/${layerSettings.key}/${palette}`;
   const path = palette.split(".");
   const colorScale = colors[path[0]][path[1]];
+  const { min, max } = dataset;
   const scale = chroma.scale(colorScale).domain([min, max]);
 
-  if (!layers.has(layerKey)) {
-    if (type === "h3") {
+  if (!layers.has(key)) {
+    if (dataset.type === "h3") {
+      const { buffer, count } = dataset;
       const offset = Int32Array.BYTES_PER_ELEMENT;
       const step = offset * 2 + Float32Array.BYTES_PER_ELEMENT;
       const length = count * step;
       const view = new DataView(buffer, 0, length);
 
+      function* getData() {
+        for (let i = 0; i < count; ++i) {
+          const left = view.getInt32(step * i);
+          const right = view.getInt32(step * i + offset);
+          const value = view.getFloat32(step * i + offset * 2);
+          yield { hexagon: h3.splitLongToH3Index(left, right), value };
+        }
+      }
+
+      const data = [...getData()];
+
       const deckGlLayer = new H3HexagonLayer({
-        id: name,
+        id: key,
         filled: true,
         pickable: true,
         blend: true,
         opacity: opacity,
         visible: visible,
-        data: { length: count },
+        data: data,
         wireframe: false,
-        getHexagon: (_, { index }) => {
-          const left = view.getInt32(step * index);
-          const right = view.getInt32(step * index + offset);
-          return h3.splitLongToH3Index(left, right);
+        getHexagon: (item: { hexagon: string }) => {
+          return item.hexagon;
         },
-        getFillColor: (_, { index }) => {
-          const value = view.getFloat32(step * index + offset * 2);
-          return [...scale(value).rgb(), 255];
+        getFillColor: (item: { value: number }) => {
+          return scale(item.value).rgb();
         },
       });
 
-      layers.set(layerKey, deckGlLayer);
-    } else if (type === "grid") {
+      layers.set(key, deckGlLayer);
+    } else if (dataset.type === "grid") {
+      const { buffer, count } = dataset;
       const view = new Float32Array(buffer, 0, count * 3);
-      const colorRange = chroma
-        .scale(colorScale)
-        .colors(colorScale.length, null)
-        .map((color) => [...color.rgb(), 255]);
+      const colorRange = scale.colors(16, null).map((color) => color.rgb());
+
       const deckGlLayer = new GridLayer({
-        id: name,
-        cellSize: 10000,
+        id: key,
+        cellSize: 40000,
         pickable: true,
         extruded: false,
         opacity: opacity,
         visible: visible,
         colorRange: colorRange as any,
+        colorDomain: [min, max],
         colorAggregation: "MEAN",
         data: { length: count },
+        gpuAggregation: true,
         getPosition: (_, { index }) => {
           return [view[index * 3], view[index * 3 + 1]];
         },
@@ -118,12 +129,29 @@ export function getDeckGlLayer(
         },
       });
 
-      layers.set(layerKey, deckGlLayer);
+      layers.set(key, deckGlLayer);
+    } else if (dataset.type === "contour") {
+      const deckGlLayer = new GeoJsonLayer({
+        id: key,
+        data: dataset.features,
+        getLineWidth: 2,
+        getLineColor: (line: any) => {
+          const value: number = line.properties.value;
+          return scale(value).rgb();
+        },
+        lineWidthUnits: "pixels",
+        filled: true,
+        stroked: true,
+        pickable: false,
+        wrapLongitude: true,
+      });
+
+      layers.set(key, deckGlLayer);
     }
   } else {
-    const deckGlLayer = layers.get(layerKey)!.clone({ visible, opacity });
-    layers.set(layerKey, deckGlLayer);
+    const deckGlLayer = layers.get(key)!.clone({ visible, opacity });
+    layers.set(key, deckGlLayer);
   }
 
-  return layers.get(layerKey);
+  return layers.get(key);
 }

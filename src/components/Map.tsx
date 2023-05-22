@@ -62,6 +62,15 @@ export function Map() {
       initialViewState={initialViewState}
       style={{ position: "relative" }}
       layers={[tileLayer, ...deckGlLayers]}
+      getTooltip={(data) => {
+        const { object } = data;
+        return (
+          (object &&
+            typeof object.value === "number" &&
+            `${Math.round(object.value)}`) ||
+          null
+        );
+      }}
       controller={true}
     />
   );

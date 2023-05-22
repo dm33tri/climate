@@ -68,6 +68,8 @@ export async function loadGoesData(path: string, initialVariable?: string) {
   const { value: Y, offset: yOffset, scale: yScale } = getValue(file, "y");
   const { value: values, offset, scale, fill } = getValue(file, variable);
   const { projection, perspectivePointHeight } = getGeosProjection(file);
+  let min = Infinity;
+  let max = -Infinity;
 
   for (let i = 0; i < X.length; ++i) {
     for (let j = 0; j < Y.length; ++j) {
@@ -82,11 +84,21 @@ export async function loadGoesData(path: string, initialVariable?: string) {
       if (Number.isNaN(value)) {
         continue;
       }
+      if (!(values[index] === fill || Number.isNaN(value))) {
+        if (value < min) {
+          min = value;
+        }
+        if (value > max) {
+          max = value;
+        }
+      }
 
       const x = (X[i] * xScale + xOffset) * perspectivePointHeight;
       const y = (Y[j] * yScale + yOffset) * perspectivePointHeight;
-
       const coords = projection.inverse([x, y]) as [number, number];
+      if (Number.isNaN(coords[0]) || Number.isNaN(coords[1])) {
+        continue;
+      }
 
       result.push([...coords, value]);
     }
@@ -94,5 +106,5 @@ export async function loadGoesData(path: string, initialVariable?: string) {
 
   file.close();
 
-  return { data: result, variables };
+  return { data: result, variables, min, max };
 }
