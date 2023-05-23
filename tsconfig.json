@@ -15,5 +15,13 @@
       "datasets/*": ["./datasets/*"]
     }
   },
+  "typedocOptions": {
+    "entryPoints": [
+      "./src/**/*.ts",
+      "./src/**/*.tsx",
+      "./functions/**/*.ts"
+    ],
+    "out": "./dist/docs"
+  },
   "exclude": ["functions/**/*"]
 }

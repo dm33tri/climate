@@ -39,22 +39,40 @@ export type Layer = LayerSettings & {
  */
 type PartialSettings = Partial<LayerSettings> & Pick<LayerSettings, "key">;
 
-type Init = {
+/**
+ * Action to initialize layer settings on startup
+ */
+export type Init = {
   action: "init";
 };
-type Add = {
+
+/**
+ * Action to add a new layer
+ */
+export type Add = {
   action: "add";
   layer: LayerSettings;
 };
-type Edit = {
+
+/**
+ * Action to edit a layer
+ */
+export type Edit = {
   action: "edit";
   layer: Partial<LayerSettings> & Pick<LayerSettings, "key">;
 };
-type Remove = {
+
+/**
+ * Action to remove a layer
+ */
+export type Remove = {
   action: "remove";
   layer: Partial<LayerSettings> & Pick<LayerSettings, "key">;
 };
 
+/**
+ * Layer settings update action payload
+ */
 export type Update = Init | Add | Edit | Remove;
 
 /**
