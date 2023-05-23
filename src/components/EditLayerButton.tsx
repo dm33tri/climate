@@ -3,6 +3,11 @@ import { Button } from "antd";
 import { useSetAtom } from "jotai";
 import { Layer, edit } from "~/atoms/layer";
 
+/**
+ * Renders a button that, when clicked, sets the `edit` atom to the values of the provided `layer`.
+ * @param props.layer The layer to edit.
+ * @returns The rendered button.
+ */
 export function EditLayerButton({ layer }: { layer: Layer }) {
   const setEditLayer = useSetAtom(edit);
 

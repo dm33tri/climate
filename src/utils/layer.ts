@@ -10,6 +10,9 @@ import { LayerSettings } from "~/atoms/layer";
 import { Dataset, DatasetParams } from "~/atoms/dataset";
 import { colors } from "~/utils/colors";
 
+/**
+ * calculate parameters to pass to the loader
+ */
 export function getParams(
   layer: Partial<LayerSettings>,
   date: Dayjs
@@ -56,6 +59,9 @@ export function getParams(
 
 const layers = new Map<string, DeckGLLayer>();
 
+/**
+ * instantiate a deck.gl layer to render a dataset
+ */
 export function getDeckGlLayer(
   dataset: Dataset,
   layerSettings: LayerSettings

@@ -1,10 +1,11 @@
-// import reanalysisEra5Land from "datasets/reanalysis-era5-land.json";
-
 type Env = {
   CDS_API_KEY: string;
   R2: R2Bucket;
 };
 
+/**
+ * Reply from the CDS API.
+ */
 type CDSReply =
   | {
       state: "queued" | "running";
@@ -20,6 +21,11 @@ type CDSReply =
       reason: string;
     };
 
+/** 
+ * Handles incoming requests and retrieves data from the CDS API.
+ * @param context.params.params - `${dataset}/${variable}/${year}/${month}/${day}/${time}`
+ * @returns CDS API response.
+ */
 export const onRequest: PagesFunction<Env> = async (context) => {
   const [dataset, variable, year, month, day, time] = context.params.params;
   const key = `cds/${dataset}/${variable}/${year}/${month}/${day}/${time}.nc.zip`;

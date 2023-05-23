@@ -21,6 +21,10 @@ import ui from "~/atoms/ui";
 import { datetime } from "~/atoms/datetime";
 import { EditLayerButton } from "./EditLayerButton";
 
+/**
+ * Renders the side panel which contains the layer list and global controls.
+ * @returns The rendered side panel.
+ */
 export function Side() {
   const [date, setDate] = useAtom(datetime);
   const [layers, setLayers] = useAtom(atom.layers);

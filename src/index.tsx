@@ -9,6 +9,9 @@ import "~/worker";
 import "~/atoms/dataset";
 import "~/index.css";
 
+/**
+ * Root component
+ */
 export function Root() {
   return (
     <ConfigProvider>

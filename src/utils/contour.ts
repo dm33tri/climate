@@ -1,6 +1,9 @@
 import { geojsonToBinary } from "@loaders.gl/gis";
 import * as turf from "@turf/turf";
 
+/**
+ * Create isolines from a grid of points.
+ */
 export function contour(
   data: [number, number, number][],
   { min, max, breaks }: { min: number; max: number; breaks: number }

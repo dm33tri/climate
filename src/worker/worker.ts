@@ -6,12 +6,17 @@ import { loadEra5Data } from "~/loaders/era5";
 import { gridBin } from "~/utils/grid";
 import { contour } from "~/utils/contour";
 
+/**
+ * Size of each element in the buffer
+ */
 export const elementSize = {
   h3: 2 * Int32Array.BYTES_PER_ELEMENT + Float32Array.BYTES_PER_ELEMENT,
   grid: 3 * Float32Array.BYTES_PER_ELEMENT,
-  contour: 2 * Float32Array.BYTES_PER_ELEMENT,
 };
 
+/**
+ * A callback function to post a response to the main thread and store the data in IndexedDB
+ */
 function onLoad(response: Response | Error) {
   postMessage(response);
 
@@ -44,7 +49,7 @@ addEventListener("message", async ({ data: request }: { data: Request }) => {
   const { path, buffer, source, type, variable } = request;
 
   try {
-    let data;
+    let data, result;
     switch (source) {
       case "ERA5":
         data = await loadEra5Data(path, variable);
@@ -56,13 +61,11 @@ addEventListener("message", async ({ data: request }: { data: Request }) => {
         data = null;
     }
 
-    if (data == null) {
+    if (!data) {
       return onLoad({ ...request, error: "Data error" });
     }
 
     const { min, max } = data;
-
-    let result;
 
     switch (type) {
       case "h3":

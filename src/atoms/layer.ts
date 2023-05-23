@@ -6,29 +6,37 @@ import { Dataset, datasets } from "~/atoms/dataset";
 import { datetime } from "~/atoms/datetime";
 import { getDeckGlLayer, getParams } from "~/utils/layer";
 
+/**
+ * Layer settings
+ */
 export type LayerSettings = {
-  key: string;
-  name: string;
-  product: string;
-  type: "h3" | "grid" | "contour" | "raw";
-  palette: string;
-  opacity: number;
-  visible: boolean;
+  key: string; // unique key
+  name: string; // display name
+  product: string; // product name
+  type: "h3" | "grid" | "contour" | "raw"; // layer type
+  palette: string; // palette name
+  opacity: number; // opacity
+  visible: boolean; // visibility
 
-  variable?: string;
-  // can override global date
-  year?: string;
-  month?: string;
-  day?: string;
-  time?: string;
+  variable?: string; // variable of the selected product
+  year?: string; // override global year
+  month?: string; // override global month
+  day?: string; // override global day
+  time?: string; // override global time
 };
 
+/**
+ * Layer instance
+ */
 export type Layer = LayerSettings & {
   state: "loading" | "loaded" | "error";
   layer?: DeckGLLayer;
   dataset?: Dataset;
 };
 
+/**
+ * Partial layer settings
+ */
 type PartialSettings = Partial<LayerSettings> & Pick<LayerSettings, "key">;
 
 type Init = {
@@ -49,6 +57,9 @@ type Remove = {
 
 export type Update = Init | Add | Edit | Remove;
 
+/**
+ * Layer settings stored in local storage
+ */
 const settings = atomWithStorage<LayerSettings[]>("layers", [
   {
     visible: true,
@@ -70,6 +81,11 @@ const settings = atomWithStorage<LayerSettings[]>("layers", [
   },
 ]);
 
+/**
+ * Layer settings dictionary
+ * @param name - layer name
+ * @returns layer settings
+ */
 const family = atomFamily((_name: Layer["key"]) => {
   const layerSettings = atom<PartialSettings | null>(null);
   return atom(
@@ -126,8 +142,14 @@ const family = atomFamily((_name: Layer["key"]) => {
   );
 });
 
+/**
+ * Layer settings being edited or created
+ */
 export const edit = atom<Partial<LayerSettings> | null>(null);
 
+/**
+ * Layer settings array atom
+ */
 export const layers = atom(
   (get) =>
     get(settings)

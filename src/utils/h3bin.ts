@@ -1,5 +1,8 @@
 import * as h3 from "h3-js";
 
+/**
+ * create a hexagonal grid from a list of points
+ */
 export function h3bin(
   data: [number, number, number][],
   buffer: SharedArrayBuffer | ArrayBuffer,

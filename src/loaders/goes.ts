@@ -8,6 +8,9 @@ const client = new S3Client({
   signer: { sign: async (request) => request },
 });
 
+/**
+ * Load GOES data from S3 bucket.
+ */
 export async function loadGoesData(path: string, initialVariable?: string) {
   const { FS } = await h5wasm.ready;
 

@@ -4,6 +4,10 @@ import { PlusOutlined } from "@ant-design/icons";
 
 import * as atom from "~/atoms/layer";
 
+/**
+ * Renders a button to add a new layer.
+ * @returns The rendered component.
+ */
 export function AddLayerButton() {
   const setEditLayer = useSetAtom(atom.edit);
 

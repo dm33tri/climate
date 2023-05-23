@@ -1,6 +1,9 @@
 import { Select, SelectProps } from "antd";
 import { colors } from "~/utils/colors";
 
+/**
+ * Palette selector element.
+ */
 const palettes: SelectProps["options"] = Object.entries(colors).map(
   ([type, palettes]) => {
     return {
@@ -41,6 +44,11 @@ const palettes: SelectProps["options"] = Object.entries(colors).map(
   }
 );
 
+/**
+ * Renders a palette selector.
+ * @param props The props to pass to the `Select` component.
+ * @returns The rendered palette selector.
+ */
 export function Palette(props: Omit<SelectProps, "options">) {
   return <Select {...props} options={palettes} />;
 }

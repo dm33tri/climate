@@ -1,16 +1,28 @@
 import type { DatasetResult, DatasetParams } from "~/atoms/dataset";
 
+/**
+ * Request to load a dataset
+ */
 export type Request = DatasetParams & {
   buffer: SharedArrayBuffer | ArrayBuffer;
 };
 
+/**
+ * Response from the worker in case of error
+ */
 export type Error = DatasetParams & { error: any };
 
+/**
+ * Response from the worker
+ */
 export type Response = DatasetParams &
   DatasetResult & {
     buffer: SharedArrayBuffer | ArrayBuffer;
   };
 
+/**
+ * Worker instance
+ */
 const worker = new Worker(new URL("./worker.ts", import.meta.url), {
   type: "module",
 });
@@ -26,6 +38,9 @@ worker.addEventListener("message", ({ data }: { data: Response | Error }) => {
   }
 });
 
+/**
+ * Load a dataset using a worker
+ */
 export function load(request: Request): Promise<Response> {
   worker.postMessage(request);
 

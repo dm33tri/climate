@@ -1,6 +1,9 @@
 import proj4 from "proj4";
 import type { Dataset, File } from "h5wasm";
 
+/**
+ * Extract value from HDF5/netCDF4 dataset.
+ */
 export function getValue(file: File, path: string) {
   const dataset = file.get(path) as Dataset;
   const [offset] = dataset.attrs["add_offset"]
@@ -20,6 +23,9 @@ export function getValue(file: File, path: string) {
   return { offset, scale, fill, value };
 }
 
+/**
+ * Extract projection from geostaionary satellite data.
+ */
 export function getGeosProjection(file: File) {
   const goesImagerProjection = file.get("goes_imager_projection") as Dataset;
   const [longitudeOfProjectionOrigin] = goesImagerProjection.attrs[

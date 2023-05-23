@@ -1,6 +1,9 @@
 import { unzipSync } from "fflate";
 import { NetCDFReader } from "@loaders.gl/netcdf";
 
+/**
+ * Load ERA5 data from the CDS API using proxy worker.
+ */
 export async function loadEra5Data(
   path: string,
   initialVariable?: string

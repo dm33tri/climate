@@ -1,5 +1,8 @@
 import chroma from "chroma-js";
 
+/**
+ * Color palettes for use in charts.
+ */
 export const colors = {
   Sequential: {
     Viridis: [
@@ -588,42 +591,3 @@ export const colors = {
     ],
   },
 } as Record<string, Record<string, string[]>>;
-
-// export const COLORSCALE_TYPES = [
-//   "sequential",
-//   "divergent",
-//   "categorical",
-//   "cyclical",
-//   "cubehelix",
-//   "cmocean",
-//   "custom",
-// ];
-
-// export const SCALES_WITHOUT_LOG = ["divergent", "categorical", "custom"];
-
-// export const CUBEHELIX = [
-//   { start: 300, rotations: -1.5 },
-//   { start: 0, rotations: -0.4 },
-//   { start: 0, rotations: -0.1 },
-//   { start: 100, rotations: 0.4 },
-//   { start: 200, rotations: -0.1 },
-//   { start: 200, rotations: -0.4 },
-//   { start: 200, rotations: 0.4 },
-//   { start: 300, rotations: -0.1 },
-// ];
-
-// export const DEFAULT_START = 300;
-// export const DEFAULT_ROTATIONS = -1.5;
-// export const DEFAULT_HUE = 1;
-// export const DEFAULT_GAMMA = 1;
-// export const DEFAULT_LIGHTNESS = [0.85, 0.15];
-// export const DEFAULT_NCOLORS = 10;
-// export const DEFAULT_SWATCHES = 9;
-// export const DEFAULT_SCALE = chroma
-//   .scale(["#fafa6e", "#2A4858"])
-//   .mode("lch")
-//   .colors(DEFAULT_SWATCHES);
-// export const DEFAULT_LOG_BREAKPOINTS = 4;
-// export const DEFAULT_BREAKPOINTS = [0, 1];
-// export const DEFAULT_SWATCH_WIDTH = 20;
-// export const DEFAULT_NPREVIEWCOLORS = 10;

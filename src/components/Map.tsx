@@ -8,6 +8,10 @@ import { TileLayer } from "@deck.gl/geo-layers/typed";
 import layer from "~/atoms/layer";
 import ui from "~/atoms/ui";
 
+/**
+ * Tile (OSM) layer for the map.
+ * @see https://deck.gl/docs/api-reference/core/tile-layer
+ */
 const tileLayer = new TileLayer({
   data: [
     "https://a.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}@2x.png",
@@ -35,12 +39,21 @@ const tileLayer = new TileLayer({
   },
 });
 
+/**
+ * The initial view state of the map.
+ * @see https://deck.gl/docs/api-reference/core/deck#initialviewstate
+ */
 const initialViewState = {
   longitude: 37.618423,
   latitude: 55.751244,
   zoom: 1,
 };
 
+/**
+ * Renders the map.
+ * @returns The rendered component.
+ * @see https://deck.gl/docs/api-reference/core/deck
+ */
 export function Map() {
   const layers = useAtomValue(layer.layers);
   const projection = useAtomValue(ui.projection);

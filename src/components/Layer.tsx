@@ -19,6 +19,10 @@ import { useEffect } from "react";
 
 const tree = [...reanalysis_era5_land, ...goes_16];
 
+/**
+ * Renders a drawer to edit a layer.
+ * @returns The rendered component.
+ */
 export function Layer() {
   const [layer, setLayer] = useAtom(edit);
   const [form] = Form.useForm<LayerSettings>();
