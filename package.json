@@ -3,7 +3,7 @@
   "private": true,
   "version": "0.0.0",
   "scripts": {
-    "dev": "wrangler pages dev -- vite",
+    "dev": "wrangler pages dev",
     "build": "vite build"
   },
   "dependencies": {
@@ -13,14 +13,9 @@
     "@loaders.gl/gis": "^3.4.2",
     "@loaders.gl/netcdf": "^3.3.4",
     "@math.gl/core": "^3.6.3",
-    "@tanstack/react-query": "^4.29.5",
     "@turf/turf": "^6.5.0",
     "antd": "^5.4.6",
     "chroma-js": "^2.4.2",
-    "d3-delaunay": "^6.0.4",
-    "d3-geo": "^3.1.0",
-    "d3-geo-voronoi": "^2.0.1",
-    "d3-tricontour": "^1.0.2",
     "dayjs": "^1.11.7",
     "deck.gl": "^8.9.12",
     "fflate": "^0.7.4",
@@ -33,22 +28,15 @@
     "react-dom": "^18.2.0"
   },
   "devDependencies": {
-    "@cloudflare/kv-asset-handler": "^0.3.0",
-    "@cloudflare/workers-types": "^4.20230419.0",
+    "@cloudflare/workers-types": "^4.20230518.0",
     "@types/chroma-js": "^2.4.0",
-    "@types/d3-geo": "^3.0.3",
-    "@types/delaunator": "^5.0.0",
-    "@types/pako": "^2.0.0",
     "@types/proj4": "^2.5.2",
-    "@types/react-color": "^3.0.6",
     "@types/react-dom": "^18.2.3",
     "autoprefixer": "^10.4.14",
     "postcss": "^8.4.23",
-    "tailwindcss": "^3.3.2",
     "typescript": "^5.0.4",
     "vite": "^4.3.5",
-    "vite-plugin-glsl": "^1.1.2",
     "vitest": "^0.30.1",
-    "wrangler": "^3.0.0"
+    "wrangler": "^3.0.1"
   }
 }
