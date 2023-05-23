@@ -4,7 +4,7 @@
   "version": "0.0.0",
   "scripts": {
     "dev": "wrangler pages dev -- vite",
-    "build": "vite build",
+    "build": "vite build && npm run docs",
     "docs": "typedoc --tsconfig ./tsconfig.json"
   },
   "dependencies": {
