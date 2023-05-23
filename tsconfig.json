@@ -21,7 +21,8 @@
       "./src/**/*.tsx",
       "./functions/**/*.ts"
     ],
-    "out": "./dist/docs"
+    "out": "./dist/docs",
+    "githubPages": false
   },
   "exclude": ["functions/**/*"]
 }
